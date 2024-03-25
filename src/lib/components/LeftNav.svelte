@@ -2,23 +2,28 @@
 	<img src="/images/logotext.png" alt="LOGO" class="logo" />
 	<ul class="routes">
 		<li class="route active">
-			<a href={"#"}> <img src="/icons/home.svg" alt="home" />Home</a>
-		</li>
-		<li class="route">
-			<a href={"#"}><img src="/icons/chat.svg" alt="chat" />Messages</a>
-		</li>
-		<li class="route">
-			<a href={"#"}>
-				<img
-					src="/icons/notification.svg"
-					alt="notifications"
-				/>Notifications</a
-			>
+			<a href={"/home"}>
+				<img src="/icons/home.svg" alt="home" />
+				Home
+			</a>
 		</li>
 		<li class="route">
 			<a href={"#"}>
-				<img src="/icons/community.svg" alt="communities" />Communities</a
-			>
+				<img src="/icons/chat.svg" alt="chat" />
+				Messages
+			</a>
+		</li>
+		<li class="route">
+			<a href={"#"}>
+				<img src="/icons/notification.svg" alt="notifications" />
+				Notifications
+			</a>
+		</li>
+		<li class="route">
+			<a href={"#"}>
+				<img src="/icons/community.svg" alt="communities" />
+				Communities
+			</a>
 		</li>
 	</ul>
 
@@ -38,7 +43,8 @@
 			</div>
 		</a>
 		<button class="logout">
-			Logout<img src="/icons/logout.svg" alt="logout" />
+			Logout
+			<img src="/icons/logout.svg" alt="logout" />
 		</button>
 	</div>
 </nav>

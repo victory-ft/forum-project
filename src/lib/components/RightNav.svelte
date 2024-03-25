@@ -1,3 +1,7 @@
+<script>
+	import Line from "./Line.svelte";
+</script>
+
 <nav>
 	<div class="search-container">
 		<img src="/icons/search.svg" alt="search" />
@@ -6,7 +10,7 @@
 
 	<div class="popular-communities">
 		<h3>Popular Communities</h3>
-		<div class="line"></div>
+		<Line />
 		<a href={"#"} class="community">
 			<p class="community-name">Software Development</p>
 			<p class="community-members">11.2k members</p>
@@ -23,7 +27,7 @@
 	</div>
 	<div class="popular-members">
 		<h3>Popular Members</h3>
-		<div class="line"></div>
+		<Line />
 		<div class="member">
 			<a href={"#"} class="member-link">
 				<p class="community-name">@oluwa_tayo</p>
@@ -88,12 +92,6 @@
 		margin-bottom: 5px;
 	}
 
-	.line {
-		background-color: #bbbbbb;
-		height: 1px;
-		width: 100%;
-	}
-
 	.popular-communities,
 	.popular-members {
 		margin-top: 20px;
@@ -110,12 +108,7 @@
 		text-decoration: none;
 		color: #000;
 		position: relative;
-
 	}
-
-	.community:hover{
-			background-color: #e60000;
-		}
 
 	.community::after,
 	.member::after {
@@ -145,7 +138,7 @@
 		align-items: center;
 		position: relative;
 
-		&:hover{
+		&:hover {
 			background-color: #f7f7f7;
 		}
 	}

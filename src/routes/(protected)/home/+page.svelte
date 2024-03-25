@@ -1,3 +1,7 @@
+<script>
+	import Line from "../../../lib/components/Line.svelte";
+</script>
+
 <div class="home-content">
 	<h1>Home</h1>
 
@@ -16,13 +20,16 @@
 	</div>
 
 	<div class="post-container">
-		<a href={"#"} class="post">
+		<a href="/post/1" class="post">
 			<div class="post-message-container">
 				<div class="post-username-container">
 					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
 					<p class="post-name">Oluwatayo</p>
 					<p class="post-username">@oluwatayo</p>
-					<div class="post-time"><span>•</span>1h</div>
+					<div class="post-time">
+						<span>•</span>
+						1h
+					</div>
 				</div>
 				<p class="post-message">
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
@@ -44,14 +51,19 @@
 			</div>
 		</a>
 	</div>
+	<Line />
+
 	<div class="post-container">
-		<a href={"#"} class="post">
+		<a href="/post/1" class="post">
 			<div class="post-message-container">
 				<div class="post-username-container">
 					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
 					<p class="post-name">Oluwatayo</p>
 					<p class="post-username">@oluwatayo</p>
-					<div class="post-time"><span>•</span>1h</div>
+					<div class="post-time">
+						<span>•</span>
+						1h
+					</div>
 				</div>
 				<p class="post-message">
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
@@ -73,14 +85,19 @@
 			</div>
 		</a>
 	</div>
+	<Line />
+
 	<div class="post-container">
-		<a href={"#"} class="post">
+		<a href="/post/1" class="post">
 			<div class="post-message-container">
 				<div class="post-username-container">
 					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
 					<p class="post-name">Oluwatayo</p>
 					<p class="post-username">@oluwatayo</p>
-					<div class="post-time"><span>•</span>1h</div>
+					<div class="post-time">
+						<span>•</span>
+						1h
+					</div>
 				</div>
 				<p class="post-message">
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
@@ -102,14 +119,19 @@
 			</div>
 		</a>
 	</div>
+	<Line />
+
 	<div class="post-container">
-		<a href={"#"} class="post">
+		<a href="/post/1" class="post">
 			<div class="post-message-container">
 				<div class="post-username-container">
 					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
 					<p class="post-name">Oluwatayo</p>
 					<p class="post-username">@oluwatayo</p>
-					<div class="post-time"><span>•</span>1h</div>
+					<div class="post-time">
+						<span>•</span>
+						1h
+					</div>
 				</div>
 				<p class="post-message">
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
@@ -131,6 +153,7 @@
 			</div>
 		</a>
 	</div>
+	<Line />
 </div>
 
 <style lang="scss">
@@ -245,10 +268,10 @@
 		margin-right: 10px;
 		font-size: 0.85rem;
 		cursor: pointer;
-	}
 
-	.post-action img {
-		width: 1.4rem;
-		margin-right: 4px;
+		img {
+			width: 1.4rem;
+			margin-right: 4px;
+		}
 	}
 </style>
