@@ -1,5 +1,5 @@
 <script>
-	import Line from "../../../lib/components/Line.svelte";
+	import Line from "$lib/components/Line.svelte";
 </script>
 
 <div class="home-content">

@@ -1,26 +1,30 @@
+<script>
+	import { page } from "$app/stores";
+</script>
+
 <nav>
 	<img src="/images/logotext.png" alt="LOGO" class="logo" />
 	<ul class="routes">
-		<li class="route active">
-			<a href={"/home"}>
+		<li class="route {$page.url.pathname === '/home' && 'active'}">
+			<a href="/home">
 				<img src="/icons/home.svg" alt="home" />
 				Home
 			</a>
 		</li>
-		<li class="route">
+		<li class="route {$page.url.pathname === '/messages' && 'active'}">
 			<a href={"#"}>
 				<img src="/icons/chat.svg" alt="chat" />
 				Messages
 			</a>
 		</li>
-		<li class="route">
+		<li class="route {$page.url.pathname === '/notifications' && 'active'}">
 			<a href={"#"}>
 				<img src="/icons/notification.svg" alt="notifications" />
 				Notifications
 			</a>
 		</li>
-		<li class="route">
-			<a href={"#"}>
+		<li class="route {$page.url.pathname === '/communities' && 'active'}">
+			<a href="/communities">
 				<img src="/icons/community.svg" alt="communities" />
 				Communities
 			</a>
