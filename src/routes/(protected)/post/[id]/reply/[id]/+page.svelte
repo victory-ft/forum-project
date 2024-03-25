@@ -8,8 +8,39 @@
 		<img src="/icons/community.svg" alt="community-icon" />
 		<p class="community-name">Software Development</p>
 	</div>
+	<br />
+	<h3>Post</h3>
+	<div class="reply-message-container">
+		<div class="post-author">
+			<div class="post-author-info">
+				<img src="/images/dummy.png" alt="post-author" class="author-image" />
+				<div class="post-author-text">
+					<p class="post-name">Ayodele</p>
+					<p class="post-username">@badboyayo</p>
+				</div>
+			</div>
+		</div>
+		<a href="/post/1" class="reply-message">
+			Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt
+			delectus dolor, dolorum quis ab itaque ut rem deserunt cum? Nostrum porro
+			nesciunt corporis voluptatum rerum eos ratione iste animi non!
+		</a>
+		<div class="post-actions">
+			<button class="post-action">
+				<img src="/icons/comment.svg" alt="comments" />
+				2
+			</button>
+			<button class="post-action">
+				<img src="/icons/thumb-up.svg" alt="like" />
+				42
+			</button>
+			<button class="post-action">
+				<img src="/icons/thumb-down.svg" alt="dislike" />
+			</button>
+		</div>
+	</div>
 
-	<h2>Post</h2>
+	<h2>Reply</h2>
 
 	<div class="post-message-container">
 		<div class="post-message">
@@ -52,7 +83,7 @@
 	<Line />
 	<div class="reply-container">
 		<div class="reply-input-container">
-			<input type="text" placeholder="Reply..." />
+			<input type="text" class="search" placeholder="Reply..." />
 			<Button>Reply</Button>
 		</div>
 
@@ -66,7 +97,7 @@
 					</div>
 				</div>
 			</div>
-			<a href="/post/1/reply/1" class="reply-message">
+			<a href={"#"} class="reply-message">
 				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt
 				delectus dolor, dolorum quis ab itaque ut rem deserunt cum? Nostrum
 				porro nesciunt corporis voluptatum rerum eos ratione iste animi non!
@@ -124,7 +155,7 @@
 					</div>
 				</div>
 			</div>
-			<a href="/post/1/reply/1" class="reply-message">
+			<a href={"#"} class="reply-message">
 				Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam adipisci
 				culpa ipsam!
 			</a>
@@ -154,6 +185,10 @@
 		border-radius: 30px;
 		overflow-y: auto;
 		padding: 2px 20px 20px;
+	}
+
+	h3 {
+		font-weight: 600;
 	}
 
 	h2 {
