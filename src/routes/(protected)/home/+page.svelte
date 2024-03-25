@@ -51,8 +51,6 @@
 			</div>
 		</a>
 	</div>
-	<Line />
-
 	<div class="post-container">
 		<a href="/post/1" class="post">
 			<div class="post-message-container">
@@ -85,8 +83,6 @@
 			</div>
 		</a>
 	</div>
-	<Line />
-
 	<div class="post-container">
 		<a href="/post/1" class="post">
 			<div class="post-message-container">
@@ -119,8 +115,6 @@
 			</div>
 		</a>
 	</div>
-	<Line />
-
 	<div class="post-container">
 		<a href="/post/1" class="post">
 			<div class="post-message-container">
@@ -153,7 +147,6 @@
 			</div>
 		</a>
 	</div>
-	<Line />
 </div>
 
 <style lang="scss">

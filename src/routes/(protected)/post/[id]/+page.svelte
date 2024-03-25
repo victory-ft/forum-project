@@ -85,7 +85,6 @@
 				</button>
 			</div>
 		</div>
-		<Line />
 		<div class="reply-message-container">
 			<div class="post-author">
 				<div class="post-author-info">
@@ -115,7 +114,6 @@
 				</button>
 			</div>
 		</div>
-		<Line />
 		<div class="reply-message-container">
 			<div class="post-author">
 				<div class="post-author-info">
@@ -144,7 +142,6 @@
 				</button>
 			</div>
 		</div>
-		<Line />
 	</div>
 </main>
 
