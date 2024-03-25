@@ -49,7 +49,7 @@
 	</div>
 </nav>
 
-<style>
+<style lang="scss">
 	nav {
 		padding: 10px 5px;
 	}
@@ -64,12 +64,12 @@
 		border-radius: 20px;
 		padding: 10px 5px;
 		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-	}
 
-	.search-container img {
-		width: 1.5rem;
-		margin-left: 3px;
-		margin-right: 3px;
+		img {
+			width: 1.5rem;
+			margin-left: 3px;
+			margin-right: 3px;
+		}
 	}
 
 	.search {
@@ -110,7 +110,12 @@
 		text-decoration: none;
 		color: #000;
 		position: relative;
+
 	}
+
+	.community:hover{
+			background-color: #e60000;
+		}
 
 	.community::after,
 	.member::after {
@@ -139,6 +144,10 @@
 		justify-content: space-between;
 		align-items: center;
 		position: relative;
+
+		&:hover{
+			background-color: #f7f7f7;
+		}
 	}
 
 	.follow {

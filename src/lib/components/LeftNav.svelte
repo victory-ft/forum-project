@@ -38,12 +38,12 @@
 			</div>
 		</a>
 		<button class="logout">
-			Logout<img src="/icons/logout.svg" alt="logout" /></button
-		>
+			Logout<img src="/icons/logout.svg" alt="logout" />
+		</button>
 	</div>
 </nav>
 
-<style>
+<style lang="scss">
 	/* * {
 		outline: 2px solid green;
 	} */
@@ -69,29 +69,28 @@
 		border-radius: 10px;
 		padding: 10px;
 		margin: 10px 0;
-	}
 
-	.route.active {
-		background-color: #512eed36;
-	}
+		img {
+			width: 1.5rem;
+			margin-right: 10px;
+			color: #502eed;
+		}
+		a {
+			display: flex;
+			justify-content: start;
+			align-items: center;
+			text-decoration: none;
+			color: #333;
+			font-weight: 500;
+		}
 
-	.route img {
-		width: 1.5rem;
-		margin-right: 10px;
-		color: #502eed;
-	}
+		&.active {
+			background-color: #512eed36;
 
-	.route a {
-		display: flex;
-		justify-content: start;
-		align-items: center;
-		text-decoration: none;
-		color: #333;
-		font-weight: 500;
-	}
-
-	.route.active a {
-		color: #502eed;
+			a {
+				color: #502eed;
+			}
+		}
 	}
 
 	.line {
@@ -109,10 +108,10 @@
 		border-radius: 25px;
 		background-color: #512eed36;
 		border: none;
-	}
 
-	.btn-container img {
-		width: 1.5rem;
+		img {
+			width: 1.5rem;
+		}
 	}
 
 	.create-btn {
@@ -123,48 +122,47 @@
 		margin-top: auto;
 		position: absolute;
 		bottom: 10px;
-	}
 
-	.profile-container a {
-		color: #000;
-		text-decoration: none;
-		display: flex;
-		justify-content: start;
-		align-items: center;
-	}
+		a {
+			color: #000;
+			text-decoration: none;
+			display: flex;
+			justify-content: start;
+			align-items: center;
 
-	.profile-container a img {
-		width: 2.2rem;
-		margin-right: 20px;
-	}
+			img {
+				width: 2.2rem;
+				margin-right: 20px;
+			}
 
-	.name {
-		margin-right: 5px;
-		font-weight: 500;
-		margin-bottom: 0;
-	}
+			.name {
+				margin-right: 5px;
+				font-weight: 500;
+				margin-bottom: 0;
+			}
 
-	.username {
-		margin-top: 0;
-		font-size: 0.9rem;
-		color: #656464;
-	}
+			.username {
+				margin-top: 0;
+				font-size: 0.9rem;
+				color: #656464;
+			}
+		}
+		.logout {
+			margin-top: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: start;
+			padding: 7px 25px;
+			font-size: 0.9rem;
+			border: none;
+			background-color: #d6d6d6;
+			border-radius: 10px;
+			color: #cc0000;
 
-	.logout {
-		margin-top: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: start;
-		padding: 7px 25px;
-		font-size: 0.9rem;
-		border: none;
-		background-color: #d6d6d6;
-		border-radius: 10px;
-		color: #cc0000;
-	}
-
-	.logout img {
-		width: 1.4rem;
-		margin-left: 5px;
+			img {
+				width: 1.4rem;
+				margin-left: 5px;
+			}
+		}
 	}
 </style>
