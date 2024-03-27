@@ -12,5 +12,7 @@
 		background-color: #512eed36;
 		cursor: pointer;
 		color: #000;
+		display: grid;
+		place-content: center;
 	}
 </style>

@@ -1,5 +1,11 @@
 <script>
-	export let setConvoFalse;
+	import { onMount } from "svelte";
+	export let setConvoFalse, conversationHeight, mainC;
+	import Button from "$lib/components/Button.svelte";
+
+	onMount(() => {
+		mainC.scrollTo(0, conversationHeight);
+	});
 </script>
 
 <div class="conversation-header">
@@ -52,6 +58,11 @@
 	<p class="message-bubble right">Lorem ipsum dolor sit.</p>
 </div>
 
+<form class="reply-container">
+	<input type="text" id="reply" name="reply" class="reply" />
+	<Button>Send</Button>
+</form>
+
 <style lang="scss">
 	.back-btn {
 		width: 2.5rem;
@@ -84,7 +95,7 @@
 		width: calc(100% - 20px);
 		padding: 0 10px;
 		z-index: 1;
-		border-radius: 30px 30px 0 0;
+		border-radius: 15px 15px 0 0;
 	}
 
 	.message-bubble {
@@ -112,6 +123,26 @@
 		background-color: #502eed;
 		color: #fff;
 		margin-left: auto;
+	}
+
+	.reply-container {
+		display: flex;
+		justify-content: start;
+		align-items: center;
+		position: absolute;
+		/* transform: translateX(-50%); */
+		height: 45px;
+		/* -webkit-transform: translateZ(0); */
+		/* background-color: #c1b4ff; */
+		max-width: inherit;
+		width: 100%;
+		bottom: 0;
+		input {
+			width: calc(100% - 20px);
+			margin-right: 10px;
+			padding: 7px 10px;
+			font-size: 1rem;
+		}
 	}
 
 	@media only screen and (max-width: 670px) {
