@@ -68,6 +68,7 @@
 			background-color: #bbbbbb;
 			cursor: pointer;
 			margin: 0 10px;
+			color: #000;
 
 			&.active {
 				background-color: #512eed36;

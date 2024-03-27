@@ -119,6 +119,7 @@
 		border-radius: 25px;
 		background-color: #512eed36;
 		border: none;
+		color: #000;
 
 		img {
 			width: 1.5rem;
@@ -127,6 +128,7 @@
 
 	.create-btn {
 		font-size: 1rem;
+		color: #000;
 	}
 
 	.profile-container {
