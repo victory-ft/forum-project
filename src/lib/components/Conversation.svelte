@@ -84,6 +84,7 @@
 		width: calc(100% - 20px);
 		padding: 0 10px;
 		z-index: 1;
+		border-radius: 30px 30px 0 0;
 	}
 
 	.message-bubble {
