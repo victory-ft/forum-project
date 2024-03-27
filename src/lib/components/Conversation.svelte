@@ -1,4 +1,11 @@
+<script>
+	export let setConvoFalse;
+</script>
+
 <div class="conversation-header">
+	<button class="back-btn" on:click={() => setConvoFalse()}>
+		<img src="/icons/arrow-left.svg" alt="back" />
+	</button>
 	<img src="/images/dummy.png" alt="profile" class="profile-picture" />
 	<p class="name">Victory</p>
 </div>
@@ -45,7 +52,19 @@
 	<p class="message-bubble right">Lorem ipsum dolor sit.</p>
 </div>
 
-<style>
+<style lang="scss">
+	.back-btn {
+		width: 2.5rem;
+		height: 2.5rem;
+		background-color: transparent;
+		border: none;
+		margin-right: 5px;
+		display: none;
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
 	.profile-picture {
 		width: 3rem;
 		border-radius: 50%;
@@ -59,7 +78,7 @@
 		justify-content: start;
 		align-items: center;
 		position: sticky;
-		top: 0px;
+		top: 0;
 		background-color: #fff;
 		border-bottom: 1px solid #dddddd;
 		width: calc(100% - 20px);
@@ -68,7 +87,8 @@
 	}
 
 	.message-bubble {
-		width: 270px;
+		/* min-width: 50px; */
+		max-width: 270px;
 		padding: 10px;
 		margin: 10px;
 		word-wrap: break-word;
@@ -78,8 +98,8 @@
 		position: relative;
 	}
 
-	.message-bubble p::before,
-	.message-bubble p::after {
+	.message-bubble::before,
+	.message-bubble::after {
 		bottom: -0.1rem;
 		content: "";
 		height: 1rem;
@@ -91,5 +111,19 @@
 		background-color: #502eed;
 		color: #fff;
 		margin-left: auto;
+	}
+
+	@media only screen and (max-width: 670px) {
+		.message-bubble {
+			max-width: 200px;
+			font-size: 0.9rem;
+		}
+		.back-btn {
+			display: block;
+		}
+
+		.conversation-header {
+			position: sticky;
+		}
 	}
 </style>
