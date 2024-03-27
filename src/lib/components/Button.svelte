@@ -11,5 +11,6 @@
 		font-size: 1rem;
 		background-color: #512eed36;
 		cursor: pointer;
+		color: #000;
 	}
 </style>

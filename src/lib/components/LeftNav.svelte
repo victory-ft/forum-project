@@ -70,8 +70,8 @@
 
 	.close-btn {
 		position: absolute;
-		width: 2rem;
-		height: 2rem;
+		width: 2.5rem;
+		height: 2.5rem;
 		background-color: transparent;
 		border: none;
 		top: 10px;
@@ -79,8 +79,8 @@
 		display: none;
 
 		img {
-			width: 2rem;
-			height: 2rem;
+			width: 100%;
+			height: 100%;
 		}
 	}
 
