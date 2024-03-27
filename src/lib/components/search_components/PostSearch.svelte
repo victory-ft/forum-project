@@ -3,8 +3,10 @@
 		<div class="post-message-container">
 			<div class="post-username-container">
 				<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-				<p class="post-name">Oluwatayo</p>
-				<p class="post-username">@oluwatayo</p>
+				<div class="profile-text-info">
+					<p class="post-name">Oluwatayo</p>
+					<p class="post-username">@oluwatayo</p>
+				</div>
 				<div class="post-time">
 					<span>•</span>
 					1h
@@ -35,8 +37,10 @@
 		<div class="post-message-container">
 			<div class="post-username-container">
 				<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-				<p class="post-name">Oluwatayo</p>
-				<p class="post-username">@oluwatayo</p>
+				<div class="profile-text-info">
+					<p class="post-name">Oluwatayo</p>
+					<p class="post-username">@oluwatayo</p>
+				</div>
 				<div class="post-time">
 					<span>•</span>
 					1h
@@ -135,6 +139,26 @@
 		img {
 			width: 1.4rem;
 			margin-right: 4px;
+		}
+	}
+
+	.profile-text-info {
+		display: flex;
+		justify-content: start;
+		align-items: center;
+		/* flex-direction: column !important; */
+	}
+
+	@media only screen and (max-width: 500px) {
+		.profile-text-info {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: start;
+		}
+
+		.profile-text-info p {
+			margin: 0;
 		}
 	}
 </style>

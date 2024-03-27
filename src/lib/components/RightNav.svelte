@@ -151,4 +151,10 @@
 		background-color: #512eed36;
 		cursor: pointer;
 	}
+
+	@media only screen and (max-width: 960px) {
+		nav {
+			display: none;
+		}
+	}
 </style>

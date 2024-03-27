@@ -74,4 +74,14 @@
 			}
 		}
 	}
+
+	@media only screen and (max-width: 960px) {
+		.search-types {
+			flex-wrap: wrap;
+
+			.search-type {
+				margin-bottom: 5px;
+			}
+		}
+	}
 </style>

@@ -283,4 +283,20 @@
 			color: #000;
 		}
 	}
+
+	@media only screen and (max-width: 960px) {
+		.post-container {
+			margin: 0;
+			padding: 5px;
+		}
+
+		.post-message-container,
+		.reply-container {
+			margin: 10px;
+		}
+
+		.post-community {
+			display: none;
+		}
+	}
 </style>

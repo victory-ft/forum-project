@@ -1,30 +1,31 @@
 <script>
 	import { page } from "$app/stores";
+	export let isMenuOpen, closeMenu;
 </script>
 
-<nav>
+<nav class:active={isMenuOpen}>
 	<img src="/images/logotext.png" alt="LOGO" class="logo" />
 	<ul class="routes">
 		<li class="route {$page.url.pathname === '/home' && 'active'}">
-			<a href="/home">
+			<a href="/home" on:click={() => closeMenu()}>
 				<img src="/icons/home.svg" alt="home" />
 				Home
 			</a>
 		</li>
 		<li class="route {$page.url.pathname === '/messages' && 'active'}">
-			<a href={"#"}>
+			<a href={"#"} on:click={() => closeMenu()}>
 				<img src="/icons/chat.svg" alt="chat" />
 				Messages
 			</a>
 		</li>
 		<li class="route {$page.url.pathname === '/notifications' && 'active'}">
-			<a href={"#"}>
+			<a href={"#"} on:click={() => closeMenu()}>
 				<img src="/icons/notification.svg" alt="notifications" />
 				Notifications
 			</a>
 		</li>
 		<li class="route {$page.url.pathname === '/communities' && 'active'}">
-			<a href="/communities">
+			<a href="/communities" on:click={() => closeMenu()}>
 				<img src="/icons/community.svg" alt="communities" />
 				Communities
 			</a>
@@ -173,6 +174,22 @@
 				width: 1.4rem;
 				margin-left: 5px;
 			}
+		}
+	}
+
+	@media only screen and (max-width: 1200px) {
+		nav {
+			position: absolute;
+			left: 0;
+			width: 300px;
+			height: 97dvh;
+			z-index: 2;
+			background-color: #f7f7f7;
+			display: none;
+		}
+
+		nav.active {
+			display: block;
 		}
 	}
 </style>
