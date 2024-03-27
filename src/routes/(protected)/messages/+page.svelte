@@ -62,6 +62,7 @@
 	.name {
 		margin-left: 10px;
 		font-size: 1.1rem;
+		color: #000;
 	}
 
 	.profile-picture {

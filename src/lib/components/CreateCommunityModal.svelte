@@ -68,6 +68,7 @@
 		padding: 10px;
 		width: calc(100% - 20px);
 		margin-bottom: 20px;
+		font-size: 1rem;
 	}
 
 	@media only screen and (max-width: 650px) {

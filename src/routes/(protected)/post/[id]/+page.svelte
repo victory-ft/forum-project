@@ -269,6 +269,7 @@
 			border-radius: 20px;
 			border: none;
 			background-color: #ededed;
+			font-size: 1rem;
 		}
 	}
 
