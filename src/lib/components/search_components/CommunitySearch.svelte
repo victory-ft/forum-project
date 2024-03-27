@@ -83,7 +83,7 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fill, 10rem);
 		place-content: center;
-		justify-content: space-between;
+		justify-content: space-evenly;
 		grid-gap: 10px;
 	}
 
@@ -115,6 +115,12 @@
 			padding: 0;
 			font-size: 0.85rem;
 			color: #656464;
+		}
+	}
+
+	@media only screen and (max-width: 500px) {
+		.communities {
+			justify-content: space-between;
 		}
 	}
 </style>
