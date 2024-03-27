@@ -20,7 +20,7 @@
 	</div>
 
 	<div class="post-container">
-		<a href="/post/1" class="post">
+		<div class="post">
 			<div class="post-message-container">
 				<div class="post-username-container">
 					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
@@ -33,10 +33,10 @@
 						1h
 					</div>
 				</div>
-				<p class="post-message">
+				<a href="/post/1" class="post-message">
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
 					mollitia quos, dignissimos voluptates possimus veritatis.
-				</p>
+				</a>
 				<div class="post-actions">
 					<button class="post-action">
 						<img src="/icons/comment.svg" alt="comments" />
@@ -51,10 +51,10 @@
 					</button>
 				</div>
 			</div>
-		</a>
+		</div>
 	</div>
 	<div class="post-container">
-		<a href="/post/1" class="post">
+		<div class="post">
 			<div class="post-message-container">
 				<div class="post-username-container">
 					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
@@ -67,10 +67,10 @@
 						1h
 					</div>
 				</div>
-				<p class="post-message">
+				<a href="/post/1" class="post-message">
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
 					mollitia quos, dignissimos voluptates possimus veritatis.
-				</p>
+				</a>
 				<div class="post-actions">
 					<button class="post-action">
 						<img src="/icons/comment.svg" alt="comments" />
@@ -85,10 +85,10 @@
 					</button>
 				</div>
 			</div>
-		</a>
+		</div>
 	</div>
 	<div class="post-container">
-		<a href="/post/1" class="post">
+		<div class="post">
 			<div class="post-message-container">
 				<div class="post-username-container">
 					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
@@ -101,10 +101,10 @@
 						1h
 					</div>
 				</div>
-				<p class="post-message">
+				<a href="/post/1" class="post-message">
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
 					mollitia quos, dignissimos voluptates possimus veritatis.
-				</p>
+				</a>
 				<div class="post-actions">
 					<button class="post-action">
 						<img src="/icons/comment.svg" alt="comments" />
@@ -119,10 +119,10 @@
 					</button>
 				</div>
 			</div>
-		</a>
+		</div>
 	</div>
 	<div class="post-container">
-		<a href="/post/1" class="post">
+		<div href="/post/1" class="post">
 			<div class="post-message-container">
 				<div class="post-username-container">
 					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
@@ -135,10 +135,10 @@
 						1h
 					</div>
 				</div>
-				<p class="post-message">
+				<a href="/post/1" class="post-message">
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
 					mollitia quos, dignissimos voluptates possimus veritatis.
-				</p>
+				</a>
 				<div class="post-actions">
 					<button class="post-action">
 						<img src="/icons/comment.svg" alt="comments" />
@@ -153,7 +153,7 @@
 					</button>
 				</div>
 			</div>
-		</a>
+		</div>
 	</div>
 </div>
 
@@ -251,6 +251,8 @@
 
 	.post-message {
 		margin: 5px 0;
+		text-decoration: none;
+		color: #000;
 	}
 
 	.post-actions {
