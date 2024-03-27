@@ -71,6 +71,7 @@
 	.profile-img {
 		width: 3rem;
 		margin-right: 10px;
+		border-radius: 50%;
 	}
 
 	.post-container {
@@ -147,6 +148,12 @@
 		justify-content: start;
 		align-items: center;
 		/* flex-direction: column !important; */
+	}
+
+	@media only screen and (max-width: 960px) {
+		.post-container {
+			padding: 5px 0;
+		}
 	}
 
 	@media only screen and (max-width: 500px) {

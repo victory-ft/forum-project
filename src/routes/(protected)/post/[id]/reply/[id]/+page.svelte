@@ -323,7 +323,7 @@
 	@media only screen and (max-width: 960px) {
 		.post-container {
 			margin: 0;
-			padding: 5px;
+			padding: 5px 0;
 		}
 
 		.post-message-container,

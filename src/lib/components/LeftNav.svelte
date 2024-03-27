@@ -16,7 +16,7 @@
 			</a>
 		</li>
 		<li class="route {$page.url.pathname === '/messages' && 'active'}">
-			<a href={"#"} on:click={() => closeMenu()}>
+			<a href="/messages" on:click={() => closeMenu()}>
 				<img src="/icons/chat.svg" alt="chat" />
 				Messages
 			</a>
@@ -166,6 +166,7 @@
 			img {
 				width: 2.2rem;
 				margin-right: 20px;
+				border-radius: 50%;
 			}
 
 			.name {

@@ -37,6 +37,7 @@
 		background-color: transparent;
 		border: none;
 		display: none;
+		z-index: 99;
 	}
 	.main-container {
 		position: relative;

@@ -185,6 +185,7 @@
 	.profile-img {
 		width: 3rem;
 		margin-right: 10px;
+		border-radius: 50%;
 	}
 
 	.post-input {
@@ -289,9 +290,14 @@
 	@media only screen and (max-width: 960px) {
 		.home-content {
 			margin: 0;
+			/* padding: 5px; */
 		}
 		h1 {
 			margin-top: 0px;
+		}
+
+		.post-container {
+			padding: 5px 0;
 		}
 	}
 
