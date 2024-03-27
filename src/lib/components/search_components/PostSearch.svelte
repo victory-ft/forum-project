@@ -126,7 +126,6 @@
 	}
 
 	.post-action {
-		font-family: "Poppins", sans-serif;
 		background-color: transparent;
 		border: none;
 		display: flex;
@@ -135,6 +134,7 @@
 		margin-right: 10px;
 		font-size: 0.85rem;
 		cursor: pointer;
+		color: #000;
 
 		img {
 			width: 1.4rem;

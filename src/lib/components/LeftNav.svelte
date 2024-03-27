@@ -1,9 +1,12 @@
 <script>
 	import { page } from "$app/stores";
-	export let isMenuOpen, closeMenu;
+	export let isMenuOpen, closeMenu, setCreateModal;
 </script>
 
 <nav class:active={isMenuOpen}>
+	<button class="close-btn" on:click={() => closeMenu()}>
+		<img src="/icons/close.svg" alt="close" />
+	</button>
 	<img src="/images/logotext.png" alt="LOGO" class="logo" />
 	<ul class="routes">
 		<li class="route {$page.url.pathname === '/home' && 'active'}">
@@ -34,7 +37,7 @@
 
 	<div class="line"></div>
 
-	<button class="btn-container">
+	<button class="btn-container" on:click={() => setCreateModal()}>
 		<img src="/icons/add.svg" alt="add" />
 		<p class="create-btn">Create Community</p>
 	</button>
@@ -62,6 +65,23 @@
 	nav {
 		padding: 10px;
 		position: relative;
+		overflow-y: auto;
+	}
+
+	.close-btn {
+		position: absolute;
+		width: 2rem;
+		height: 2rem;
+		background-color: transparent;
+		border: none;
+		top: 10px;
+		right: 10px;
+		display: none;
+
+		img {
+			width: 2rem;
+			height: 2rem;
+		}
 	}
 
 	.logo {
@@ -188,6 +208,10 @@
 			z-index: 2;
 			background-color: #f7f7f7;
 			display: none;
+		}
+
+		.close-btn {
+			display: block;
 		}
 
 		nav.active {
