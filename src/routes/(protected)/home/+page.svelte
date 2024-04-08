@@ -290,7 +290,8 @@
 	@media only screen and (max-width: 960px) {
 		.home-content {
 			margin: 0;
-			/* padding: 5px; */
+			margin-right: -10px;
+			padding-right: 1px;
 		}
 		h1 {
 			margin-top: 0px;
