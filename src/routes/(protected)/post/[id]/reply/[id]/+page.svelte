@@ -322,6 +322,8 @@
 
 	@media only screen and (max-width: 960px) {
 		.post-container {
+			border-radius: 0;
+
 			margin: 0;
 			margin-left: -10px;
 			margin-right: -10px;

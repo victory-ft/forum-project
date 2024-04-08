@@ -289,6 +289,7 @@
 
 	@media only screen and (max-width: 960px) {
 		.home-content {
+			border-radius: 0;
 			margin: 0;
 			margin-right: -10px;
 			margin-bottom: -10px;
