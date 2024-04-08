@@ -291,6 +291,7 @@
 		.home-content {
 			margin: 0;
 			margin-right: -10px;
+			margin-bottom: -10px;
 			padding-right: 1px;
 		}
 		h1 {

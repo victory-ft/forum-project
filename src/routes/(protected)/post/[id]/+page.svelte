@@ -288,7 +288,10 @@
 	@media only screen and (max-width: 960px) {
 		.post-container {
 			margin: 0;
-			padding: 5px;
+			margin-left: -10px;
+			margin-right: -10px;
+			margin-bottom: -10px;
+			padding-right: 1px;
 		}
 
 		.post-message-container,

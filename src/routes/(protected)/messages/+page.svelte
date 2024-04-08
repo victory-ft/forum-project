@@ -259,6 +259,15 @@
 		}
 	}
 
+	@media only screen and (max-width: 960px) {
+		main {
+			margin: 0;
+			margin-right: -10px;
+			margin-bottom: -10px;
+			padding-right: 1px;
+		}
+	}
+
 	@media only screen and (max-width: 670px) {
 		main {
 			display: block;
