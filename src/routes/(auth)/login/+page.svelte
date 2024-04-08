@@ -1,33 +1,15 @@
 <script>
+	import { enhance } from "$app/forms";
+	import { navigating } from "$app/stores";
+
 	import Button from "$lib/components/Button.svelte";
 	import Loading from "$lib/components/Loading.svelte";
-	import { navigating } from "$app/stores";
 	import PageLoading from "$lib/components/PageLoading.svelte";
-	// import { Circle } from "svelte-loading-spinners";
 
-	let email = "";
-	let password = "";
+	export let form;
+	// $: console.log(form);
+
 	let loginLoad = false;
-	let errorMessage = "";
-
-	const login = async () => {
-		try {
-			loginLoad = true;
-			const response = await fetch(
-				"https://forum-co-backend.onrender.com/auth/log-in/",
-				{
-					method: "POST",
-					body: JSON.stringify({ email, password }),
-				},
-			);
-			const resJSON = await response.json();
-			console.log(resJSON);
-		} catch (error) {
-			console.error(error);
-		} finally {
-			loginLoad = false;
-		}
-	};
 </script>
 
 {#if $navigating}
@@ -36,29 +18,27 @@
 	<div class="auth-container">
 		<img src="/images/logotext.png" alt="logo" />
 		<h1>Login</h1>
-		<form on:submit|preventDefault={login} class="auth-form">
+		<form
+			method="POST"
+			class="auth-form"
+			use:enhance={() => {
+				loginLoad = true;
+				return async ({ update }) => {
+					loginLoad = false;
+					update();
+				};
+			}}
+		>
 			<div class="form-row">
 				<div class="input-data">
-					<input
-						type="email"
-						name="email"
-						id="email"
-						bind:value={email}
-						required
-					/>
+					<input type="email" name="email" id="email" required />
 					<div class="underline"></div>
 					<label for="email">Email</label>
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="input-data">
-					<input
-						type="password"
-						name="password"
-						id="password"
-						bind:value={password}
-						required
-					/>
+					<input type="password" name="password" id="password" required />
 					<div class="underline"></div>
 					<label for="password">Password</label>
 				</div>
@@ -71,6 +51,9 @@
 				{/if}
 			</Button>
 		</form>
+		{#if form?.error}
+			<p class="form-error">Incorrect username or password.</p>
+		{/if}
 		<p class="log-link">
 			Don't have an account? <a href="/signup">Sign up</a>
 		</p>
@@ -162,6 +145,18 @@
 			text-decoration: none;
 			color: #502eed;
 		}
+	}
+
+	.input-error {
+		font-size: 0.8rem;
+		color: #cc0000;
+		margin-top: 0;
+	}
+
+	.form-error {
+		font-size: 1rem;
+		color: #cc0000;
+		/* margin-top: 0; */
 	}
 
 	@media only screen and (max-width: 650px) {

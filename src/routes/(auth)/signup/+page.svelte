@@ -1,42 +1,18 @@
 <script>
+	import { enhance } from "$app/forms";
+
 	import Button from "$lib/components/Button.svelte";
 	import Loading from "$lib/components/Loading.svelte";
 
-	let first_name = "";
-	let last_name = "";
-	let email = "";
+	// let first_name = "";
+	// let last_name = "";
+	// let email = "";
 	let password = "";
 	let confirm_password = "";
-	let username = "";
+	// let username = "";
 
 	let signupLoad = false;
 	let isPasswordMatching = true;
-
-	const signup = async () => {
-		try {
-			signupLoad = true;
-			const response = await fetch(
-				"https://forum-co-backend.onrender.com/auth/register/",
-				{
-					method: "POST",
-					body: JSON.stringify({
-						first_name,
-						last_name,
-						email,
-						password,
-						confirm_password,
-						username,
-					}),
-				},
-			);
-			const resJSON = await response.json();
-			console.log(resJSON);
-		} catch (error) {
-			console.error(error);
-		} finally {
-			signupLoad = false;
-		}
-	};
 
 	const checkPasswordMatch = () => {
 		if (password !== confirm_password) {
@@ -45,46 +21,41 @@
 			isPasswordMatching = true;
 		}
 	};
+
+	export let form;
+	// $: console.log(form);
 </script>
 
 <div class="auth-container">
 	<img src="/images/logotext.png" alt="logo" />
 	<h1>Sign Up</h1>
 
-	<form on:submit|preventDefault={signup} class="auth-form">
+	<form
+		method="POST"
+		class="auth-form"
+		use:enhance={() => {
+			signupLoad = true;
+			return async ({ update }) => {
+				signupLoad = false;
+				update();
+			};
+		}}
+	>
 		<div class="form-row">
 			<div class="input-data">
-				<input
-					type="text"
-					name="first-name"
-					id="first-name"
-					bind:value={first_name}
-					required
-				/>
+				<input type="text" name="first_name" id="first-name" required />
 				<div class="underline"></div>
 				<label for="first-name">First Name</label>
 			</div>
 			<div class="input-data">
-				<input
-					type="text"
-					name="last-name"
-					id="last-name"
-					bind:value={last_name}
-					required
-				/>
+				<input type="text" name="last_name" id="last-name" required />
 				<div class="underline"></div>
 				<label for="last-name">Last Name</label>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="input-data">
-				<input
-					type="email"
-					name="email"
-					id="email"
-					bind:value={email}
-					required
-				/>
+				<input type="email" name="email" id="email" required />
 				<div class="underline"></div>
 				<label for="email">Email</label>
 			</div>
@@ -106,7 +77,7 @@
 			<div class="input-data">
 				<input
 					type="password"
-					name="confirm-password"
+					name="confirm_password"
 					id="confirm-password"
 					bind:value={confirm_password}
 					on:keyup={checkPasswordMatch}
@@ -121,13 +92,7 @@
 		</div>
 		<div class="form-row">
 			<div class="input-data">
-				<input
-					type="text"
-					name="username"
-					id="username"
-					bind:value={username}
-					required
-				/>
+				<input type="text" name="username" id="username" required />
 				<div class="underline"></div>
 				<label for="username">Choose a username</label>
 			</div>
@@ -142,6 +107,9 @@
 			</Button>
 		</div>
 	</form>
+	{#if form?.error}
+		<p class="form-error">An error occurred</p>
+	{/if}
 	<p class="log-link">
 		Already an account? <a href="/login">Log in</a>
 	</p>
@@ -242,6 +210,11 @@
 			text-decoration: none;
 			color: #502eed;
 		}
+	}
+	.form-error {
+		font-size: 1rem;
+		color: #cc0000;
+		/* margin-top: 0; */
 	}
 
 	@media only screen and (max-width: 650px) {

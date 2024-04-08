@@ -54,10 +54,10 @@
 			Logout
 			<img src="/icons/logout.svg" alt="logout" />
 		</button>
-		<button class="logout login">
+		<!-- <button class="logout login">
 			Login
 			<img src="/icons/login.svg" alt="logout" />
-		</button>
+		</button> -->
 	</div>
 </nav>
 
