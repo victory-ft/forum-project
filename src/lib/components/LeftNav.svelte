@@ -54,6 +54,10 @@
 			Logout
 			<img src="/icons/logout.svg" alt="logout" />
 		</button>
+		<button class="logout login">
+			Login
+			<img src="/icons/login.svg" alt="logout" />
+		</button>
 	</div>
 </nav>
 
@@ -192,6 +196,10 @@
 			background-color: #d6d6d6;
 			border-radius: 10px;
 			color: #cc0000;
+
+			&.login {
+				color: #000;
+			}
 
 			img {
 				width: 1.4rem;
