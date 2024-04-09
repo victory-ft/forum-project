@@ -23,7 +23,7 @@
 			},
 		);
 		posts = await response.json();
-		console.log(posts);
+		// console.log(posts);
 		loading = false;
 	};
 

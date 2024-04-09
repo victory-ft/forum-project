@@ -56,7 +56,7 @@
 		}
 
 		.menu-btn {
-			right: 10%;
+			right: 2%;
 		}
 	}
 </style>

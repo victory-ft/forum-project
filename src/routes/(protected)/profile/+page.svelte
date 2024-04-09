@@ -26,7 +26,7 @@
 			},
 		);
 		profile = await response.json();
-		console.log(profile);
+		// console.log(profile);
 		date = new Date(profile.date_joined);
 		loading = false;
 	};

@@ -229,6 +229,10 @@
 			.form-row {
 				.input-data {
 					min-width: 38vw;
+
+					input {
+						min-width: unset;
+					}
 				}
 			}
 		}

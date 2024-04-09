@@ -38,13 +38,14 @@ export const actions = {
 				}),
 			},
 		);
+		if (response.ok) {
+			redirect(302, "/login");
+		}
 		let resJSON = await response.json();
 		if (resJSON.non_field_errors) {
 			return fail(400, { field_error: [...resJSON.non_field_errors] });
 		}
-		if (response.ok) {
-			redirect(302, "/login");
-		} else {
+		if (!response.ok) {
 			return fail(400, { error: resJSON });
 		}
 	},

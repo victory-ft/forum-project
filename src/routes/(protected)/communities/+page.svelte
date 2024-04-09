@@ -19,6 +19,7 @@
 				},
 			);
 			communities = await response.json();
+			// console.log(communities);
 			loading = false;
 		};
 

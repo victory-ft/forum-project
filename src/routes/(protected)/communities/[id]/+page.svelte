@@ -11,16 +11,18 @@
 	const { id } = $page.params;
 
 	$: if (form?.success) {
-		fetchPosts();
+		fetchCommunity();
 	}
 
 	let loading = true;
 	let createLoading = false;
+	let joined = false;
+	let community = {};
 	let posts = [];
 
-	const fetchPosts = async () => {
+	const fetchCommunity = async () => {
 		const response = await fetch(
-			`https://forum-co-backend.onrender.com/socials/get-community-posts/${id}`,
+			`https://forum-co-backend.onrender.com/socials/get-community/${id}`,
 			{
 				method: "GET",
 				headers: {
@@ -28,14 +30,16 @@
 				},
 			},
 		);
-		posts = await response.json();
+		const resJSON = await response.json();
+		community = resJSON;
+		// console.log(community);
+		posts = resJSON.posts;
 		posts.reverse();
-		console.log(posts);
 		loading = false;
 	};
 
 	const joinCommunity = async () => {
-		const response = await fetch(
+		await fetch(
 			`https://forum-co-backend.onrender.com/socials/join-community/${id}`,
 			{
 				method: "POST",
@@ -44,10 +48,13 @@
 				},
 			},
 		);
+
+		// fetchCommunity()
+		// console.log("ran");
 	};
 
 	onMount(() => {
-		fetchPosts();
+		fetchCommunity();
 	});
 </script>
 
@@ -57,11 +64,21 @@
 	</main>
 {:else}
 	<main>
-		<h1>Sports Community</h1>
+		<h1>{community.name}</h1>
 		<h2 class="community-desc">
-			Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, delectus.
+			{community.description}
 		</h2>
-		<button class="post-btn">Join Community</button>
+		<button
+			class="post-btn"
+			disabled={community.is_joined}
+			on:click={joinCommunity}
+		>
+			{#if community.is_joined}
+				Joined
+			{:else}
+				Join Community
+			{/if}
+		</button>
 		<br />
 		<br />
 		<div class="post-msg-container">
