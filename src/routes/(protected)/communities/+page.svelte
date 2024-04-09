@@ -1,72 +1,52 @@
-<main>
-	<h1>Communities</h1>
+<script>
+	import { onMount } from "svelte";
+	import PageLoading from "$lib/components/PageLoading.svelte";
 
-	<div class="communities">
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Software Development</p>
-				<p class="community-members">11.2k members</p>
-			</div>
-		</a>
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Football</p>
-				<p class="community-members">20.1k members</p>
-			</div>
-		</a>
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Gaming</p>
-				<p class="community-members">9.0k members</p>
-			</div>
-		</a>
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Software Development</p>
-				<p class="community-members">11.2k members</p>
-			</div>
-		</a>
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Football</p>
-				<p class="community-members">20.1k members</p>
-			</div>
-		</a>
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Gaming</p>
-				<p class="community-members">9.0k members</p>
-			</div>
-		</a>
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Football</p>
-				<p class="community-members">20.1k members</p>
-			</div>
-		</a>
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Gaming</p>
-				<p class="community-members">9.0k members</p>
-			</div>
-		</a>
-		<a href={"#"} class="community">
-			<img src="/images/com.jpg" alt="community" />
-			<div>
-				<p class="community-name">Software Development</p>
-				<p class="community-members">11.2k members</p>
-			</div>
-		</a>
-	</div>
-</main>
+	export let data;
+	let loading = true;
+	let communities = [];
+	// $: console.log(loading);
+
+	onMount(() => {
+		const fetchData = async () => {
+			const response = await fetch(
+				"https://forum-co-backend.onrender.com/socials/get-communities/",
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+			communities = await response.json();
+			loading = false;
+		};
+
+		fetchData();
+	});
+</script>
+
+{#if loading}
+	<main>
+		<PageLoading />
+	</main>
+{:else}
+	<main>
+		<h1>Communities</h1>
+
+		<div class="communities">
+			{#each communities as community}
+				<a href={`/communities/${community.pk}`} class="community">
+					<img src="/images/group.png" alt="community" />
+					<div>
+						<p class="community-name">{community.name}</p>
+						<p class="community-members">{community.member_count} members</p>
+					</div>
+				</a>
+			{/each}
+		</div>
+	</main>
+{/if}
 
 <style lang="scss">
 	h1 {
@@ -102,8 +82,12 @@
 
 		img {
 			border-radius: 50%;
-			width: 50px;
-			height: 50px;
+			filter: invert(100%);
+			margin-right: 5px;
+			padding: 5px;
+			width: 30px;
+			height: 30px;
+			background-color: #656464;
 		}
 
 		.community-name {

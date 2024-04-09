@@ -1,6 +1,13 @@
 <script>
 	import { page } from "$app/stores";
-	export let isMenuOpen, closeMenu, setCreateModal;
+	import { goto } from "$app/navigation";
+	export let isMenuOpen, closeMenu;
+
+	function logout(name) {
+		document.cookie =
+			name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+		goto("/login");
+	}
 </script>
 
 <nav class:active={isMenuOpen}>
@@ -37,7 +44,13 @@
 
 	<div class="line"></div>
 
-	<button class="btn-container" on:click={() => setCreateModal()}>
+	<button
+		class="btn-container"
+		on:click={() => {
+			goto("/communities/create");
+			closeMenu();
+		}}
+	>
 		<img src="/icons/add.svg" alt="add" />
 		<p class="create-btn">Create Community</p>
 	</button>
@@ -50,7 +63,7 @@
 				<p class="username">@oluwa_tayo</p>
 			</div>
 		</a>
-		<button class="logout">
+		<button class="logout" on:click={() => logout("token")}>
 			Logout
 			<img src="/icons/logout.svg" alt="logout" />
 		</button>

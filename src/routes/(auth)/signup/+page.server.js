@@ -1,5 +1,13 @@
 import { redirect, fail } from "@sveltejs/kit";
 
+export const load = async ({ cookies }) => {
+	const token = cookies.get("token");
+
+	if (token) {
+		redirect(302, "/home");
+	}
+};
+
 export const actions = {
 	default: async ({ request, cookies }) => {
 		const form = await request.formData();
@@ -11,12 +19,6 @@ export const actions = {
 		const confirm_password = form.get("confirm_password");
 		const age = 100;
 
-		if (!email) {
-			return fail(400, { emailMissing: true });
-		}
-		if (!password) {
-			return fail(400, { passwordMissing: true });
-		}
 		const response = await fetch(
 			"https://forum-co-backend.onrender.com/auth/register/",
 			{
@@ -36,15 +38,14 @@ export const actions = {
 				}),
 			},
 		);
-		// var resJSON = await response.json();
-		// console.log(resJSON);
-
+		let resJSON = await response.json();
+		if (resJSON.non_field_errors) {
+			return fail(400, { field_error: [...resJSON.non_field_errors] });
+		}
 		if (response.ok) {
 			redirect(302, "/login");
-		}
-
-		if (!response.ok) {
-			return fail(400, { error: "error" });
+		} else {
+			return fail(400, { error: resJSON });
 		}
 	},
 };

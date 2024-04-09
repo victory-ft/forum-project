@@ -1,6 +1,29 @@
 <script>
 	import Button from "$lib/components/Button.svelte";
+	import Loading from "$lib/components/Loading.svelte";
 	export let setCreateModal;
+
+	let name = "";
+	let description = "";
+	let createLoad = false;
+	async function createCommunity() {
+		createLoad = true;
+		// const response = await fetch(
+		// 	"https://forum-co-backend.onrender.com/socials/create-community/",
+		// 	{
+		// 		method: "POST",
+		// 		headers: {
+		// 			Accept: "application/json",
+		// 			"Content-Type": "application/json",
+		// 		},
+		// 		body: JSON.stringify({
+		// 			name,
+		// 			description,
+		// 		}),
+		// 	},
+		// );
+		// var resJSON = await response.json();
+	}
 </script>
 
 <div class="modal">
@@ -10,16 +33,34 @@
 		<img src="/icons/close.svg" alt="close" />
 	</button>
 
-	<form action="">
+	<form on:submit|preventDefault={createCommunity}>
 		<label for="name">Name</label>
 		<br />
-		<input type="text" name="name" id="name" class="form-name" />
+		<input
+			type="text"
+			name="name"
+			id="name"
+			class="form-name"
+			bind:value={name}
+		/>
 		<br />
 		<label for="name">Description</label>
 		<br />
-		<input type="text" name="desc" id="desc" class="form-desc" />
+		<input
+			type="text"
+			name="desc"
+			id="desc"
+			class="form-desc"
+			bind:value={description}
+		/>
 		<br />
-		<Button>Create</Button>
+		<Button>
+			{#if createLoad}
+				<Loading />
+			{:else}
+				Create
+			{/if}
+		</Button>
 	</form>
 </div>
 

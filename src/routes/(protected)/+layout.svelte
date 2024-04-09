@@ -1,7 +1,6 @@
 <script>
 	import LeftNav from "$lib/components/LeftNav.svelte";
 	import RightNav from "$lib/components/RightNav.svelte";
-	import CreateCommunityModal from "$lib/components/CreateCommunityModal.svelte";
 
 	let isMenuOpen = false;
 	let isCreateCommunityOpen = false;
@@ -9,20 +8,13 @@
 	function closeMenu() {
 		isMenuOpen = false;
 	}
-	function setCreateModal() {
-		isCreateCommunityOpen = !isCreateCommunityOpen;
-		isMenuOpen = false;
-	}
 </script>
 
 <main class="main-container">
-	<LeftNav {isMenuOpen} {closeMenu} {setCreateModal} />
+	<LeftNav {isMenuOpen} {closeMenu} />
 	<button class="menu-btn" on:click={() => (isMenuOpen = !isMenuOpen)}>
-		<img src="icons/menu.svg" alt="menu" />
+		<img src="/icons/menu.svg" alt="menu" />
 	</button>
-	{#if isCreateCommunityOpen}
-		<CreateCommunityModal {setCreateModal} />
-	{/if}
 	<slot />
 	<RightNav />
 </main>

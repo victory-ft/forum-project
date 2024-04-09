@@ -107,6 +107,11 @@
 			</Button>
 		</div>
 	</form>
+	{#if form?.field_error}
+		{#each form.field_error as error}
+			<p class="form-error">{error}</p>
+		{/each}
+	{/if}
 	{#if form?.error}
 		<p class="form-error">An error occurred</p>
 	{/if}
@@ -144,6 +149,7 @@
 				input {
 					display: block;
 					width: 100%;
+					min-width: 280px;
 					height: 100%;
 					border: none;
 					font-size: 17px;
@@ -214,6 +220,7 @@
 	.form-error {
 		font-size: 1rem;
 		color: #cc0000;
+		margin-left: 10px;
 		/* margin-top: 0; */
 	}
 

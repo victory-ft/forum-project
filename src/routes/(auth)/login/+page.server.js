@@ -1,5 +1,13 @@
 import { redirect, fail } from "@sveltejs/kit";
 
+export const load = async ({ cookies }) => {
+	const token = cookies.get("token");
+
+	if (token) {
+		redirect(302, "/home");
+	}
+};
+
 export const actions = {
 	default: async ({ request, cookies }) => {
 		const form = await request.formData();
@@ -23,15 +31,19 @@ export const actions = {
 				body: JSON.stringify({ email, password }),
 			},
 		);
-		var resJSON = await response.json();
+		let resJSON = await response.json();
 		// console.log(resJSON);
 
 		if (resJSON.non_field_errors) {
-			return fail(400, { error: "error" });
+			return fail(400, { error: resJSON.non_field_errors });
 		}
 
 		if (response.ok) {
-			cookies.set("token", resJSON.access_token, { path: "/" });
+			cookies.set("token", resJSON.access_token, {
+				path: "/",
+				httpOnly: false,
+			});
+
 			redirect(302, "/home");
 		}
 	},
