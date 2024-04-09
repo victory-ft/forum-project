@@ -1,5 +1,35 @@
 <script>
+	import { onMount } from "svelte";
+	import { page } from "$app/stores";
+	import { enhance } from "$app/forms";
+	import PageLoading from "$lib/components/PageLoading.svelte";
+	import Loading from "$lib/components/Loading.svelte";
 	import Line from "$lib/components/Line.svelte";
+
+	export let data;
+
+	let loading = true;
+	let createLoading = false;
+	let posts = [];
+
+	const fetchPosts = async () => {
+		const response = await fetch(
+			`https://forum-co-backend.onrender.com/socials/get-homefeed/`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${data.token}`,
+				},
+			},
+		);
+		posts = await response.json();
+		console.log(posts);
+		loading = false;
+	};
+
+	onMount(() => {
+		fetchPosts();
+	});
 </script>
 
 <div class="home-content">
@@ -19,142 +49,48 @@
 		<button class="post-btn">Post</button>
 	</div>
 
-	<div class="post-container">
-		<div class="post">
-			<div class="post-message-container">
-				<div class="post-username-container">
-					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-					<div class="profile-text-info">
-						<p class="post-name">Oluwatayo</p>
-						<p class="post-username">@oluwatayo</p>
+	{#if loading}
+		<PageLoading />
+	{:else}
+		{#each posts as post}
+			<div class="post-container">
+				<div class="post">
+					<div class="post-message-container">
+						<div class="post-username-container">
+							<img src="/images/dummy.png" alt="pfp" class="profile-img" />
+							<div class="profile-text-info">
+								<p class="post-name">
+									{post.owner.first_name}
+									{post.owner.last_name}
+								</p>
+								<p class="post-username">@{post.owner.username}</p>
+							</div>
+							<div class="post-time">
+								<span>•</span>
+								1h
+							</div>
+						</div>
+						<a href="/post/1" class="post-message">
+							{post.text}
+						</a>
+						<div class="post-actions">
+							<button class="post-action">
+								<img src="/icons/comment.svg" alt="comments" />
+								{post.comments}
+							</button>
+							<button class="post-action">
+								<img src="/icons/thumb-up.svg" alt="like" />
+								{post.likes}
+							</button>
+							<button class="post-action">
+								<img src="/icons/thumb-down.svg" alt="dislike" />
+							</button>
+						</div>
 					</div>
-					<div class="post-time">
-						<span>•</span>
-						1h
-					</div>
-				</div>
-				<a href="/post/1" class="post-message">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
-					mollitia quos, dignissimos voluptates possimus veritatis.
-				</a>
-				<div class="post-actions">
-					<button class="post-action">
-						<img src="/icons/comment.svg" alt="comments" />
-						3
-					</button>
-					<button class="post-action">
-						<img src="/icons/thumb-up.svg" alt="like" />
-						81
-					</button>
-					<button class="post-action">
-						<img src="/icons/thumb-down.svg" alt="dislike" />
-					</button>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="post-container">
-		<div class="post">
-			<div class="post-message-container">
-				<div class="post-username-container">
-					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-					<div class="profile-text-info">
-						<p class="post-name">Oluwatayo</p>
-						<p class="post-username">@oluwatayo</p>
-					</div>
-					<div class="post-time">
-						<span>•</span>
-						1h
-					</div>
-				</div>
-				<a href="/post/1" class="post-message">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
-					mollitia quos, dignissimos voluptates possimus veritatis.
-				</a>
-				<div class="post-actions">
-					<button class="post-action">
-						<img src="/icons/comment.svg" alt="comments" />
-						2
-					</button>
-					<button class="post-action">
-						<img src="/icons/thumb-up.svg" alt="like" />
-						62
-					</button>
-					<button class="post-action">
-						<img src="/icons/thumb-down.svg" alt="dislike" />
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="post-container">
-		<div class="post">
-			<div class="post-message-container">
-				<div class="post-username-container">
-					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-					<div class="profile-text-info">
-						<p class="post-name">Oluwatayo</p>
-						<p class="post-username">@oluwatayo</p>
-					</div>
-					<div class="post-time">
-						<span>•</span>
-						1h
-					</div>
-				</div>
-				<a href="/post/1" class="post-message">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
-					mollitia quos, dignissimos voluptates possimus veritatis.
-				</a>
-				<div class="post-actions">
-					<button class="post-action">
-						<img src="/icons/comment.svg" alt="comments" />
-						12
-					</button>
-					<button class="post-action">
-						<img src="/icons/thumb-up.svg" alt="like" />
-						202
-					</button>
-					<button class="post-action">
-						<img src="/icons/thumb-down.svg" alt="dislike" />
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="post-container">
-		<div href="/post/1" class="post">
-			<div class="post-message-container">
-				<div class="post-username-container">
-					<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-					<div class="profile-text-info">
-						<p class="post-name">Oluwatayo</p>
-						<p class="post-username">@oluwatayo</p>
-					</div>
-					<div class="post-time">
-						<span>•</span>
-						1h
-					</div>
-				</div>
-				<a href="/post/1" class="post-message">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
-					mollitia quos, dignissimos voluptates possimus veritatis.
-				</a>
-				<div class="post-actions">
-					<button class="post-action">
-						<img src="/icons/comment.svg" alt="comments" />
-						12
-					</button>
-					<button class="post-action">
-						<img src="/icons/thumb-up.svg" alt="like" />
-						202
-					</button>
-					<button class="post-action">
-						<img src="/icons/thumb-down.svg" alt="dislike" />
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+		{/each}
+	{/if}
 </div>
 
 <style lang="scss">

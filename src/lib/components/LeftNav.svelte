@@ -56,7 +56,7 @@
 	</button>
 
 	<div href={"#"} class="profile-container">
-		<a href={"#"}>
+		<a href="/profile">
 			<img src="/images/dummy.png" alt="profile-img" />
 			<div class="profile-info-container">
 				<p class="name">Oluwatayo</p>

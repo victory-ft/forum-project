@@ -7,13 +7,16 @@
 
 	export let data;
 	export let form;
-	let loading = true;
-	let createLoading = false;
-	let posts = [];
+
 	const { id } = $page.params;
+
 	$: if (form?.success) {
 		fetchPosts();
 	}
+
+	let loading = true;
+	let createLoading = false;
+	let posts = [];
 
 	const fetchPosts = async () => {
 		const response = await fetch(
@@ -31,6 +34,18 @@
 		loading = false;
 	};
 
+	const joinCommunity = async () => {
+		const response = await fetch(
+			`https://forum-co-backend.onrender.com/socials/join-community/${id}`,
+			{
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${data.token}`,
+				},
+			},
+		);
+	};
+
 	onMount(() => {
 		fetchPosts();
 	});
@@ -46,6 +61,8 @@
 		<h2 class="community-desc">
 			Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, delectus.
 		</h2>
+		<button class="post-btn">Join Community</button>
+		<br />
 		<br />
 		<div class="post-msg-container">
 			<form
@@ -135,7 +152,7 @@
 
 	.community-desc {
 		font-weight: 400;
-		margin-top: 0;
+		margin: 0;
 		font-size: 1.2rem;
 	}
 

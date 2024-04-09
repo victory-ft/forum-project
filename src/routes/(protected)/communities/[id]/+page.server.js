@@ -1,11 +1,3 @@
-export const load = async ({ locals, cookies }) => {
-	const token = cookies.get("token");
-	locals.token = token;
-
-	const res = locals;
-	return res;
-};
-
 export const actions = {
 	post: async ({ request, cookies, params }) => {
 		const form = await request.formData();
