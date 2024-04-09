@@ -63,7 +63,13 @@
 				<p class="username">@oluwa_tayo</p>
 			</div>
 		</a>
-		<button class="logout" on:click={() => logout("token")}>
+		<button
+			class="logout"
+			on:click={() => {
+				logout("token");
+				closeMenu();
+			}}
+		>
 			Logout
 			<img src="/icons/logout.svg" alt="logout" />
 		</button>
