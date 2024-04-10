@@ -68,12 +68,12 @@
 				Messages
 			</a>
 		</li>
-		<li class="route {$page.url.pathname === '/notifications' && 'active'}">
+		<!-- <li class="route {$page.url.pathname === '/notifications' && 'active'}">
 			<a href={"#"} on:click={() => closeMenu()}>
 				<img src="/icons/notification.svg" alt="notifications" />
 				Notifications
 			</a>
-		</li>
+		</li> -->
 		<li class="route {$page.url.pathname === '/communities' && 'active'}">
 			<a href="/communities" on:click={() => closeMenu()}>
 				<img src="/icons/community.svg" alt="communities" />
@@ -99,7 +99,7 @@
 		{#if loading}
 			<Loading />
 		{:else}
-			<a href="/profile">
+			<a href="/profile" on:click={closeMenu}>
 				<img src="/images/dummy.png" alt="profile-img" />
 				<div class="profile-info-container">
 					<p class="name">{profile.first_name} {profile.last_name}</p>

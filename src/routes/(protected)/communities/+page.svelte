@@ -112,7 +112,7 @@
 	@media only screen and (max-width: 960px) {
 		main {
 			border-radius: 0;
-			margin: 0;
+			margin: 0 -10px -10px -20px;
 			margin-right: -10px;
 			margin-bottom: -10px;
 			padding-right: 1px;

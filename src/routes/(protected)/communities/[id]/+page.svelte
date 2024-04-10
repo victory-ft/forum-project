@@ -20,6 +20,7 @@
 	let community = {};
 	let posts = [];
 	let members = {};
+	let isLiked = [];
 
 	const fetchCommunity = async () => {
 		const response = await fetch(
@@ -33,6 +34,7 @@
 		);
 		const resJSON = await response.json();
 		community = resJSON;
+		// console.log(community);
 		posts = resJSON.posts;
 		posts.reverse();
 		fetchCommunityUsers();
@@ -72,6 +74,46 @@
 	onMount(() => {
 		fetchCommunity();
 	});
+
+	const likePost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/like-post/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				console.log("liked successfully");
+				isLiked = [
+					...isLiked,
+					{
+						liked: true,
+						id,
+					},
+				];
+				console.log(isLiked);
+				checkIfLiked();
+			}
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
+	const checkIfLiked = (id) => {
+		isLiked.find((like) => {
+			if (like.id === id) {
+				console.log("found");
+			} else {
+				console.log("not found");
+			}
+		});
+	};
 </script>
 
 {#if loading}
@@ -167,7 +209,7 @@
 									<img src="/icons/comment.svg" alt="comments" />
 									{post.comments}
 								</button>
-								<button class="post-action">
+								<button class="post-action" on:click={() => likePost(post.pk)}>
 									<img src="/icons/thumb-up.svg" alt="like" />
 									{post.likes}
 								</button>

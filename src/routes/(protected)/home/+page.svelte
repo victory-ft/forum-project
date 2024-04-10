@@ -10,6 +10,7 @@
 
 	let loading = true;
 	let createLoading = false;
+	let isLiked = [];
 	let posts = [];
 
 	const fetchPosts = async () => {
@@ -23,8 +24,53 @@
 			},
 		);
 		posts = await response.json();
-		// console.log(posts);
+		console.log(posts);
 		loading = false;
+	};
+
+	onMount(() => {
+		fetchPosts();
+	});
+
+	const likePost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/like-post/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				console.log("liked successfully");
+				isLiked = [
+					...isLiked,
+					{
+						liked: true,
+						id,
+					},
+				];
+				console.log(isLiked);
+				checkIfLiked();
+			}
+			console.log("h", response);
+			//
+		} catch (error) {
+			console.log(error.messages);
+		}
+	};
+
+	const checkIfLiked = (id) => {
+		isLiked.find((like) => {
+			if (like.id === id) {
+				console.log("found");
+			} else {
+				console.log("not found");
+			}
+		});
 	};
 
 	onMount(() => {
@@ -78,7 +124,7 @@
 								<img src="/icons/comment.svg" alt="comments" />
 								{post.comments}
 							</button>
-							<button class="post-action">
+							<button class="post-action" on:click={() => likePost(post.pk)}>
 								<img src="/icons/thumb-up.svg" alt="like" />
 								{post.likes}
 							</button>
