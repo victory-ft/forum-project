@@ -149,7 +149,7 @@
 				input {
 					display: block;
 					width: 100%;
-					min-width: 280px;
+					min-width: 180px;
 					height: 100%;
 					border: none;
 					font-size: 17px;

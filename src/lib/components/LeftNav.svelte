@@ -1,13 +1,53 @@
 <script>
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
+	import { onMount } from "svelte";
+	import Loading from "$lib/components/Loading.svelte";
+
 	export let isMenuOpen, closeMenu;
 
+	let loading = true;
+	let profile = {};
+
+	function getCookie(cname) {
+		let name = cname + "=";
+		let decodedCookie = decodeURIComponent(document.cookie);
+		let ca = decodedCookie.split(";");
+		for (let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == " ") {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
 	function logout(name) {
 		document.cookie =
 			name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		goto("/login");
 	}
+
+	const fetchProfile = async () => {
+		const auth = getCookie("token");
+		const response = await fetch(
+			`https://forum-co-backend.onrender.com/auth/get-profile`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${auth}`,
+				},
+			},
+		);
+		profile = await response.json();
+		loading = false;
+	};
+
+	onMount(() => {
+		fetchProfile();
+	});
 </script>
 
 <nav class:active={isMenuOpen}>
@@ -56,13 +96,18 @@
 	</button>
 
 	<div href={"#"} class="profile-container">
-		<a href="/profile">
-			<img src="/images/dummy.png" alt="profile-img" />
-			<div class="profile-info-container">
-				<p class="name">Oluwatayo</p>
-				<p class="username">@oluwa_tayo</p>
-			</div>
-		</a>
+		{#if loading}
+			<Loading />
+		{:else}
+			<a href="/profile">
+				<img src="/images/dummy.png" alt="profile-img" />
+				<div class="profile-info-container">
+					<p class="name">{profile.first_name} {profile.last_name}</p>
+					<p class="username">@{profile.username}</p>
+				</div>
+			</a>
+		{/if}
+
 		<button
 			class="logout"
 			on:click={() => {

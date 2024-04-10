@@ -81,7 +81,7 @@
 			margin: 32px 0;
 
 			.input-data {
-				min-width: 600px;
+				min-width: 350px;
 				height: 40px;
 				margin: 0 20px;
 				position: relative;

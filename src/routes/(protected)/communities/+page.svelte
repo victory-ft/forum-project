@@ -41,7 +41,10 @@
 					<img src="/images/group.png" alt="community" />
 					<div>
 						<p class="community-name">{community.name}</p>
-						<p class="community-members">{community.member_count} members</p>
+						<p class="community-members">
+							{community.member_count}
+							{community.member_count == 1 ? "member" : "members"}
+						</p>
 					</div>
 				</a>
 			{/each}

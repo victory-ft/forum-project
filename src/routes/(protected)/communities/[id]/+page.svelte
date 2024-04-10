@@ -19,6 +19,7 @@
 	let joined = false;
 	let community = {};
 	let posts = [];
+	let members = {};
 
 	const fetchCommunity = async () => {
 		const response = await fetch(
@@ -32,25 +33,40 @@
 		);
 		const resJSON = await response.json();
 		community = resJSON;
-		// console.log(community);
 		posts = resJSON.posts;
 		posts.reverse();
+		fetchCommunityUsers();
 		loading = false;
 	};
 
-	const joinCommunity = async () => {
-		await fetch(
-			`https://forum-co-backend.onrender.com/socials/join-community/${id}`,
+	const fetchCommunityUsers = async () => {
+		const response = await fetch(
+			`https://forum-co-backend.onrender.com/socials/get-community-users/${id}`,
 			{
-				method: "POST",
+				method: "GET",
 				headers: {
 					Authorization: `Bearer ${data.token}`,
 				},
 			},
 		);
+		members = await response.json();
+	};
 
-		// fetchCommunity()
-		// console.log("ran");
+	const joinCommunity = async () => {
+		try {
+			await fetch(
+				`https://forum-co-backend.onrender.com/socials/join-community/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+			fetchCommunity();
+		} catch (error) {
+			// console.log("error:", error);
+		}
 	};
 
 	onMount(() => {
@@ -68,8 +84,17 @@
 		<h2 class="community-desc">
 			{community.description}
 		</h2>
+		<a href={`/communities/members/${id}`} class="members-number">
+			{#if members.members}
+				<span>{members.members.length}</span>
+				members
+			{:else}
+				...
+			{/if}
+		</a>
+		<br />
 		<button
-			class="post-btn"
+			class="post-btn cd"
 			disabled={community.is_joined}
 			on:click={joinCommunity}
 		>
@@ -170,7 +195,20 @@
 	.community-desc {
 		font-weight: 400;
 		margin: 0;
+		margin-bottom: 5px;
 		font-size: 1.2rem;
+	}
+
+	.members-number {
+		margin-top: 5px;
+		margin-bottom: 5px;
+		font-size: 1rem;
+		color: #424242;
+		text-decoration: none;
+		span {
+			font-weight: 600;
+			color: #000;
+		}
 	}
 
 	main {
@@ -233,6 +271,10 @@
 		background-color: #512eed36;
 		cursor: pointer;
 		color: #000;
+
+		&.cd {
+			margin-top: 10px;
+		}
 	}
 
 	.post-container {
@@ -316,7 +358,7 @@
 	@media only screen and (max-width: 960px) {
 		main {
 			border-radius: 0;
-			margin: 0 -10px -10px;
+			margin: 0 -10px -10px -20px;
 			padding-right: 1px;
 			padding-left: -1px;
 		}

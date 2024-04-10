@@ -4,17 +4,20 @@
 	import { enhance } from "$app/forms";
 	import PageLoading from "$lib/components/PageLoading.svelte";
 	import Loading from "$lib/components/Loading.svelte";
-	import Line from "$lib/components/Line.svelte";
 
 	export let data;
 
+	const { id } = $page.params;
+
 	let loading = true;
 	let createLoading = false;
+	let joined = false;
 	let posts = [];
+	let members = {};
 
-	const fetchPosts = async () => {
+	const fetchCommunityUsers = async () => {
 		const response = await fetch(
-			`https://forum-co-backend.onrender.com/socials/get-homefeed/`,
+			`https://forum-co-backend.onrender.com/socials/get-community-users/${id}`,
 			{
 				method: "GET",
 				headers: {
@@ -22,79 +25,77 @@
 				},
 			},
 		);
-		posts = await response.json();
-		// console.log(posts);
+		members = await response.json();
+		console.log(members);
 		loading = false;
 	};
 
 	onMount(() => {
-		fetchPosts();
+		fetchCommunityUsers();
 	});
 </script>
 
-<div class="home-content">
-	<h1>Home</h1>
-
-	<div class="post-msg-container">
-		<div class="post-input-container">
-			<img src="/images/dummy.png" alt="profile" class="profile-img" />
-			<input
-				type="text"
-				name="post"
-				id="post"
-				class="post-input"
-				placeholder="What's on your mind?"
-			/>
-		</div>
-		<button class="post-btn">Post</button>
-	</div>
-
-	{#if loading}
+{#if loading}
+	<main>
 		<PageLoading />
-	{:else}
-		{#each posts as post}
+	</main>
+{:else}
+	<main>
+		<h1>Members</h1>
+
+		<p class="members-number">
+			<span>{members.members.length}</span>
+			members
+		</p>
+
+		{#each members.members as member}
 			<div class="post-container">
-				<div class="post">
+				<a href={"#"} class="post">
 					<div class="post-message-container">
 						<div class="post-username-container">
 							<img src="/images/dummy.png" alt="pfp" class="profile-img" />
 							<div class="profile-text-info">
 								<p class="post-name">
-									{post.owner.first_name}
-									{post.owner.last_name}
+									{member.first_name}
+									{member.last_name}
 								</p>
-								<p class="post-username">@{post.owner.username}</p>
+								<p class="post-username">@{member.username}</p>
 							</div>
-							<div class="post-time">
-								<span>•</span>
-								1h
-							</div>
-						</div>
-						<a href="/post/1" class="post-message">
-							{post.text}
-						</a>
-						<div class="post-actions">
-							<button class="post-action">
-								<img src="/icons/comment.svg" alt="comments" />
-								{post.comments}
-							</button>
-							<button class="post-action">
-								<img src="/icons/thumb-up.svg" alt="like" />
-								{post.likes}
-							</button>
-							<button class="post-action">
-								<img src="/icons/thumb-down.svg" alt="dislike" />
-							</button>
 						</div>
 					</div>
-				</div>
+				</a>
 			</div>
 		{/each}
-	{/if}
-</div>
+	</main>
+{/if}
 
 <style lang="scss">
-	.home-content {
+	h1 {
+		font-weight: 600;
+		color: #502eed;
+		margin-bottom: 0;
+	}
+
+	.community-desc {
+		font-weight: 400;
+		margin: 0;
+		margin-bottom: 5px;
+		font-size: 1.2rem;
+	}
+
+	.members-number {
+		margin-top: 5px;
+		margin-bottom: 5px;
+		font-size: 1rem;
+		color: #424242;
+		text-decoration: none;
+		span {
+			font-weight: 600;
+			color: #000;
+		}
+	}
+
+	main {
 		background-color: #fff;
 		margin: 10px;
 		border-radius: 30px;
@@ -102,20 +103,31 @@
 		padding: 20px;
 	}
 
-	h1 {
-		font-weight: 600;
-		color: #502eed;
-	}
-
-	.post-msg-container {
-		width: calc(100% - 20px);
-		margin: 10px 10px 30px;
+	.no-posts {
+		font-weight: 500;
+		color: #656464;
 	}
 
 	.post-input-container {
 		display: flex;
 		justify-content: start;
-		align-items: center;
+		align-items: start;
+		flex-direction: column;
+	}
+
+	.post-msg-container {
+		form {
+			& > div {
+				display: flex;
+				width: 100%;
+			}
+			/* flex-wrap: wrap; */
+
+			button {
+				display: block;
+				/* flex: 0 1 100%; */
+			}
+		}
 	}
 
 	.profile-img {
@@ -143,6 +155,10 @@
 		background-color: #512eed36;
 		cursor: pointer;
 		color: #000;
+
+		&.cd {
+			margin-top: 10px;
+		}
 	}
 
 	.post-container {
@@ -218,38 +234,25 @@
 
 	.profile-text-info {
 		display: flex;
-		justify-content: start;
-		align-items: center;
-		/* flex-direction: column !important; */
+		justify-content: flex-start;
+		align-items: start;
+		flex-direction: column;
+
+		p {
+			margin: 0;
+		}
 	}
 
 	@media only screen and (max-width: 960px) {
-		.home-content {
+		main {
 			border-radius: 0;
-			margin: 0 -10px -10px -22px;
-			/* margin-right: -10px;
-			margin-bottom: -10px; */
+			margin: 0 -10px -10px;
 			padding-right: 1px;
+			padding-left: -1px;
 		}
+
 		h1 {
-			margin-top: 0px;
-		}
-
-		.post-container {
-			padding: 5px 10px;
-		}
-	}
-
-	@media only screen and (max-width: 500px) {
-		.profile-text-info {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: start;
-		}
-
-		.profile-text-info p {
-			margin: 0;
+			margin-top: -5px;
 		}
 	}
 </style>

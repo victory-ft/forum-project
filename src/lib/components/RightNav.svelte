@@ -1,29 +1,72 @@
 <script>
+	import { goto } from "$app/navigation";
+	import { onMount } from "svelte";
+	import Loading from "$lib/components/Loading.svelte";
 	import Line from "./Line.svelte";
+
+	let communityLoading = true;
+	let membersLoading = true;
+	let communities = [];
+
+	function getCookie(cname) {
+		let name = cname + "=";
+		let decodedCookie = decodeURIComponent(document.cookie);
+		let ca = decodedCookie.split(";");
+		for (let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == " ") {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
+
+	const fetchCommunity = async () => {
+		const auth = getCookie("token");
+		const response = await fetch(
+			`https://forum-co-backend.onrender.com/socials/get-communities/`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${auth}`,
+				},
+			},
+		);
+		communities = await response.json();
+		communities = communities.slice(0, 3);
+		communityLoading = false;
+	};
+
+	onMount(() => {
+		fetchCommunity();
+	});
 </script>
 
 <nav>
-	<div class="search-container">
+	<!-- <div class="search-container">
 		<img src="/icons/search.svg" alt="search" />
 		<input type="search" class="search" placeholder="Search..." />
-	</div>
+	</div> -->
 
 	<div class="popular-communities">
-		<h3>Popular Communities</h3>
-		<Line />
-		<a href={"#"} class="community">
-			<p class="community-name">Software Development</p>
-			<p class="community-members">11.2k members</p>
-		</a>
-
-		<a href={"#"} class="community">
-			<p class="community-name">Football</p>
-			<p class="community-members">20.1k members</p>
-		</a>
-		<a href={"#"} class="community">
-			<p class="community-name">Gaming</p>
-			<p class="community-members">9.0k members</p>
-		</a>
+		{#if communityLoading}
+			<Loading />
+		{:else}
+			<h3>Popular Communities</h3>
+			<Line />
+			{#each communities as community}
+				<a href={"#"} class="community">
+					<p class="community-name">{community.name}</p>
+					<p class="community-members">
+						{community.member_count}
+						{community.member_count == 1 ? "member" : "members"}
+					</p>
+				</a>
+			{/each}
+		{/if}
 	</div>
 	<div class="popular-members">
 		<h3>Popular Members</h3>
@@ -33,7 +76,7 @@
 				<p class="community-name">@oluwa_tayo</p>
 				<p class="community-members">11.2k followers</p>
 			</a>
-			<button class="follow">Follow</button>
+			<!-- <button class="follow">Follow</button> -->
 		</div>
 
 		<div class="member">
@@ -41,14 +84,14 @@
 				<p class="community-name">@ayodele</p>
 				<p class="community-members">20.1k followers</p>
 			</a>
-			<button class="follow">Follow</button>
+			<!-- <button class="follow">Follow</button> -->
 		</div>
 		<div class="member">
 			<a href={"#"} class="member-link">
 				<p class="community-name">@somebody</p>
 				<p class="community-members">9.0k followers</p>
 			</a>
-			<button class="follow">Follow</button>
+			<!-- <button class="follow">Follow</button> -->
 		</div>
 	</div>
 </nav>
