@@ -56,7 +56,7 @@
 				console.log(isLiked);
 				checkIfLiked();
 			}
-			console.log("h", response);
+			console.log(response);
 			//
 		} catch (error) {
 			console.log(error.messages);
@@ -104,13 +104,13 @@
 					<div class="post-message-container">
 						<div class="post-username-container">
 							<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-							<div class="profile-text-info">
+							<a href={`/profile/${post.owner.pk}`} class="profile-text-info">
 								<p class="post-name">
 									{post.owner.first_name}
 									{post.owner.last_name}
 								</p>
 								<p class="post-username">@{post.owner.username}</p>
-							</div>
+							</a>
 							<div class="post-time">
 								<span>•</span>
 								1h
@@ -210,6 +210,11 @@
 		align-items: center;
 		margin: 0;
 		margin-top: 10px;
+
+		& > a {
+			text-decoration: none;
+			color: #000;
+		}
 	}
 
 	.post-name {
@@ -236,6 +241,9 @@
 		margin: 5px 0;
 		text-decoration: none;
 		color: #000;
+		width: 100%;
+		display: block;
+		/* flex-wrap: wrap; */
 	}
 
 	.post-actions {

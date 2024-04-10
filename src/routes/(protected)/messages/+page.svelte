@@ -12,10 +12,14 @@
 		showConversation = false;
 	}
 
-	afterUpdate(() => {
+	function goToBottom() {
 		if (showConversation) {
 			mainC.scrollTo(0, conversationHeight);
 		}
+	}
+
+	afterUpdate(() => {
+		goToBottom();
 	});
 </script>
 
@@ -97,20 +101,19 @@
 				at quis reprehenderit nam soluta recusandae.
 			</p>
 			<p class="message-bubble right">Lorem ipsum dolor sit.</p>
+			<form on:submit|preventDefault={goToBottom} class="reply-container">
+				<input
+					type="text"
+					id="reply"
+					name="reply"
+					class="reply"
+					placeholder="Write a message..."
+				/>
+				<Button>
+					<img src="/icons/send-plane.svg" alt="send" class="send-msg" />
+				</Button>
+			</form>
 		</div>
-
-		<form class="reply-container">
-			<input
-				type="text"
-				id="reply"
-				name="reply"
-				class="reply"
-				placeholder="Write a message..."
-			/>
-			<Button>
-				<img src="/icons/send-plane.svg" alt="send" class="send-msg" />
-			</Button>
-		</form>
 	</div>
 </main>
 
@@ -183,16 +186,17 @@
 		margin-left: 10px;
 		font-size: 1.1rem;
 	}
+
 	.conversation-header {
 		display: flex;
 		justify-content: start;
 		align-items: center;
 		position: sticky;
-		top: 0;
+		top: -2px;
 		background-color: #fff;
 		border-bottom: 1px solid #dddddd;
 		width: calc(100% - 20px);
-		padding: 0 10px;
+		padding: 10px 10px 0;
 		z-index: 1;
 		border-radius: 15px 15px 0 0;
 	}
@@ -230,12 +234,14 @@
 		align-items: center;
 		/* position: absolute; */
 		/* transform: translateX(-50%); */
-		height: 50px;
+		/* height: 50px; */
 		/* -webkit-transform: translateZ(0); */
-		/* background-color: #c1b4ff; */
-		max-width: inherit;
-		width: 100%;
-		bottom: 0;
+		background-color: #fff;
+		/* position: fixed; */
+		position: sticky;
+		width: calc(100% - 20px);
+		bottom: -1px;
+		padding: 10px;
 		input {
 			width: calc(100% - 20px);
 			margin-right: 10px;
@@ -262,9 +268,8 @@
 	@media only screen and (max-width: 960px) {
 		main {
 			border-radius: 0;
-			margin: 0;
-			margin-right: -10px;
-			margin-bottom: -10px;
+			margin: 0 -10px -10px -15px;
+
 			padding-right: 1px;
 		}
 	}
