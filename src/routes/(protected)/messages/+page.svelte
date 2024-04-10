@@ -130,6 +130,7 @@
 	}
 
 	.people {
+		margin-top: 10px;
 		border-right: 1px solid #dddddd;
 		overflow-y: auto;
 
@@ -240,7 +241,7 @@
 		/* position: fixed; */
 		position: sticky;
 		width: calc(100% - 20px);
-		bottom: -1px;
+		bottom: -10px;
 		padding: 10px;
 		input {
 			width: calc(100% - 20px);
@@ -269,7 +270,6 @@
 		main {
 			border-radius: 0;
 			margin: 0 -10px -10px -15px;
-
 			padding-right: 1px;
 		}
 	}
