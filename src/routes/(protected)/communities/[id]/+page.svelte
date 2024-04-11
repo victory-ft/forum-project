@@ -20,7 +20,7 @@
 	let community = {};
 	let posts = [];
 	let members = {};
-	let isLiked = [];
+	let likedPosts = [];
 
 	const fetchCommunity = async () => {
 		const response = await fetch(
@@ -71,10 +71,6 @@
 		}
 	};
 
-	onMount(() => {
-		fetchCommunity();
-	});
-
 	const likePost = async (id) => {
 		try {
 			const response = await fetch(
@@ -88,16 +84,8 @@
 			);
 
 			if (response.ok) {
-				console.log("liked successfully");
-				isLiked = [
-					...isLiked,
-					{
-						liked: true,
-						id,
-					},
-				];
-				console.log(isLiked);
-				checkIfLiked();
+				// addLike(id)
+				fetchCommunity();
 			}
 			//
 		} catch (error) {
@@ -105,15 +93,75 @@
 		}
 	};
 
-	const checkIfLiked = (id) => {
-		isLiked.find((like) => {
-			if (like.id === id) {
-				console.log("found");
-			} else {
-				console.log("not found");
+	const dislikePost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/dislike-post/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				// addLike(id)
+				fetchCommunity();
 			}
-		});
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
 	};
+
+	const removeLikePost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/remove-dislike-post/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				console.log("remove like");
+
+				fetchCommunity();
+			}
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
+	const removeDislikePost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/remove-dislike-post/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				console.log("remove dislike");
+				fetchCommunity();
+			}
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+	onMount(() => {
+		fetchCommunity();
+	});
 </script>
 
 {#if loading}
@@ -189,13 +237,13 @@
 						<div class="post-message-container">
 							<div class="post-username-container">
 								<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-								<div class="profile-text-info">
+								<a href={`/profile/${post.owner.pk}`} class="profile-text-info">
 									<p class="post-name">
 										{post.owner.first_name}
 										{post.owner.last_name}
 									</p>
 									<p class="post-username">@{post.owner.username}</p>
-								</div>
+								</a>
 								<div class="post-time">
 									<span>•</span>
 									1h
@@ -209,12 +257,33 @@
 									<img src="/icons/comment.svg" alt="comments" />
 									{post.comments}
 								</button>
-								<button class="post-action" on:click={() => likePost(post.pk)}>
-									<img src="/icons/thumb-up.svg" alt="like" />
+								<button
+									class="post-action"
+									on:click={() => {
+										post.is_liked ? removeLikePost(post.pk) : likePost(post.pk);
+									}}
+								>
+									{#if post.is_liked}
+										<img src="/icons/thumb-up-fill.svg" alt="like" />
+									{:else}
+										<img src="/icons/thumb-up.svg" alt="like" />
+									{/if}
 									{post.likes}
 								</button>
-								<button class="post-action">
-									<img src="/icons/thumb-down.svg" alt="dislike" />
+								<button
+									class="post-action"
+									on:click={() => {
+										post.is_disliked
+											? removeDislikePost(post.pk)
+											: dislikePost(post.pk);
+									}}
+								>
+									{#if post.is_disliked}
+										<img src="/icons/thumb-down-fill.svg" alt="dislike" />
+									{:else}
+										<img src="/icons/thumb-down.svg" alt="dislike" />
+									{/if}
+									{post.dislikes}
 								</button>
 							</div>
 						</div>
@@ -394,6 +463,8 @@
 		display: flex;
 		justify-content: start;
 		align-items: center;
+		text-decoration: none;
+		color: #000;
 		/* flex-direction: column !important; */
 	}
 

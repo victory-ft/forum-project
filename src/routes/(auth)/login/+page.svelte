@@ -52,7 +52,7 @@
 			</Button>
 		</form>
 		{#if form?.error}
-			<p class="form-error">Incorrect username or password.</p>
+			<p class="form-error">Incorrect email or password.</p>
 		{/if}
 		<p class="log-link">
 			Don't have an account? <a href="/signup">Sign up</a>

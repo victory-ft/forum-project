@@ -1,17 +1,14 @@
 <script>
 	import { onMount } from "svelte";
-	import { page } from "$app/stores";
-	import { enhance } from "$app/forms";
 	import PageLoading from "$lib/components/PageLoading.svelte";
-	import Loading from "$lib/components/Loading.svelte";
-	import Line from "$lib/components/Line.svelte";
+	import Page from "../communities/[id]/+page.svelte";
 
 	export let data;
 
 	let loading = true;
-	let createLoading = false;
-	let isLiked = [];
 	let posts = [];
+	let likedPosts = [];
+	let dislikedPosts = [];
 
 	const fetchPosts = async () => {
 		const response = await fetch(
@@ -24,7 +21,34 @@
 			},
 		);
 		posts = await response.json();
-		console.log(posts);
+		const likedIds = new Set(likedPosts.map((post) => post.id));
+		const dislikedIds = new Set(likedPosts.map((post) => post.id));
+
+		posts.forEach((post) => {
+			if (!likedIds.has(post.pk)) {
+				likedPosts.push({
+					id: post.pk,
+					isLiked: post.is_liked,
+					likes: post.likes,
+				});
+				likedIds.add(post.pk);
+			}
+		});
+
+		posts.forEach((post) => {
+			if (!dislikedIds.has(post.pk)) {
+				dislikedPosts.push({
+					id: post.pk,
+					isDisliked: post.is_disliked,
+					dislikes: post.dislikes,
+				});
+				dislikedIds.add(post.pk);
+			}
+		});
+
+		// console.log(likedPosts);
+		// console.log(posts);
+		// console.log(dislikedPosts);
 		loading = false;
 	};
 
@@ -45,33 +69,123 @@
 			);
 
 			if (response.ok) {
-				console.log("liked successfully");
-				isLiked = [
-					...isLiked,
-					{
-						liked: true,
-						id,
-					},
-				];
-				console.log(isLiked);
-				checkIfLiked();
+				console.log("liked");
+				addLike(id);
 			}
-			console.log(response);
 			//
 		} catch (error) {
-			console.log(error.messages);
+			console.log("error", error.message);
 		}
 	};
 
-	const checkIfLiked = (id) => {
-		isLiked.find((like) => {
-			if (like.id === id) {
-				console.log("found");
-			} else {
-				console.log("not found");
+	const dislikePost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/dislike-post/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				console.log("dislike");
+				addDislike(id);
 			}
-		});
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
 	};
+
+	const removeLikePost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/remove-dislike-post/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				removeLike(id);
+			}
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
+	const removeDislikePost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/remove-dislike-post/${id}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				removeDislike(id);
+			}
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
+	function addLike(id) {
+		const postIndex = likedPosts.findIndex((post) => post.id === id);
+		if (postIndex !== -1 && !likedPosts[postIndex].isLiked) {
+			likedPosts[postIndex].likes += 1;
+			likedPosts[postIndex].isLiked = true;
+		}
+		if (postIndex !== -1 && dislikedPosts[postIndex].isDisliked) {
+			dislikedPosts[postIndex].dislikes -= 1;
+			dislikedPosts[postIndex].isDisliked = false;
+		}
+	}
+
+	function addDislike(id) {
+		const postIndex = dislikedPosts.findIndex((post) => post.id === id);
+		if (postIndex !== -1 && !dislikedPosts[postIndex].isDisliked) {
+			dislikedPosts[postIndex].dislikes += 1;
+			dislikedPosts[postIndex].isDisliked = true;
+		}
+
+		if (postIndex !== -1 && likedPosts[postIndex].isLiked) {
+			likedPosts[postIndex].likes -= 1;
+			likedPosts[postIndex].isLiked = false;
+		}
+	}
+
+	function removeLike(id) {
+		const postIndex = likedPosts.findIndex((post) => post.id === id);
+		if (postIndex !== -1 && likedPosts[postIndex].isLiked) {
+			likedPosts[postIndex].likes -= 1;
+			likedPosts[postIndex].isLiked = false;
+		}
+		if (postIndex !== -1 && dislikedPosts[postIndex].isDisliked) {
+			dislikedPosts[postIndex].dislikes -= 1;
+			dislikedPosts[postIndex].isDisliked = false;
+		}
+	}
+
+	function removeDislike(id) {
+		const postIndex = dislikedPosts.findIndex((post) => post.id === id);
+		if (postIndex !== -1 && dislikedPosts[postIndex].isDisliked) {
+			dislikedPosts[postIndex].dislikes += -1;
+			dislikedPosts[postIndex].isDisliked = false;
+		}
+	}
 
 	onMount(() => {
 		fetchPosts();
@@ -124,12 +238,51 @@
 								<img src="/icons/comment.svg" alt="comments" />
 								{post.comments}
 							</button>
-							<button class="post-action" on:click={() => likePost(post.pk)}>
-								<img src="/icons/thumb-up.svg" alt="like" />
-								{post.likes}
+							<button
+								class="post-action"
+								on:click={() => {
+									const postIndex = likedPosts.findIndex(
+										(poste) => poste.id === post.pk,
+									);
+									likedPosts[postIndex].isLiked
+										? removeLikePost(post.pk)
+										: likePost(post.pk);
+								}}
+							>
+								{#each likedPosts as liked}
+									{#if liked.id === post.pk}
+										<img
+											src={liked.isLiked
+												? "/icons/thumb-up-fill.svg"
+												: "/icons/thumb-up.svg"}
+											alt="like"
+										/>
+										{liked.likes}
+									{/if}
+								{/each}
 							</button>
-							<button class="post-action">
-								<img src="/icons/thumb-down.svg" alt="dislike" />
+							<button
+								class="post-action"
+								on:click={() => {
+									const postIndex = dislikedPosts.findIndex(
+										(poste) => poste.id === post.pk,
+									);
+									dislikedPosts[postIndex].isDisliked
+										? removeDislikePost(post.pk)
+										: dislikePost(post.pk);
+								}}
+							>
+								{#each dislikedPosts as disliked}
+									{#if disliked.id === post.pk}
+										<img
+											src={disliked.isDisliked
+												? "/icons/thumb-down-fill.svg"
+												: "/icons/thumb-down.svg"}
+											alt="like"
+										/>
+										{disliked.dislikes}
+									{/if}
+								{/each}
 							</button>
 						</div>
 					</div>

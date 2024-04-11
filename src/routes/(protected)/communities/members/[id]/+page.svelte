@@ -26,7 +26,7 @@
 			},
 		);
 		members = await response.json();
-		console.log(members);
+		// console.log(members);
 		loading = false;
 	};
 
@@ -50,7 +50,7 @@
 
 		{#each members.members as member}
 			<div class="post-container">
-				<a href={"#"} class="post">
+				<a href={`/profile/${member.pk}`} class="post">
 					<div class="post-message-container">
 						<div class="post-username-container">
 							<img src="/images/dummy.png" alt="pfp" class="profile-img" />
