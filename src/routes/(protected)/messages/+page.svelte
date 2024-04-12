@@ -23,7 +23,6 @@
 
 	export let data;
 
-	let isChatOpen = false;
 	let loading = true;
 	let friends = [];
 	let conversations = [];
@@ -55,6 +54,32 @@
 				});
 				// console.log(friends);
 				loading = false;
+			}
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
+	const refreshMessages = async () => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/message/get-conversations/`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				// console.log("refresh");
+				conversations = await response.json();
+				friends = [];
+				conversations.map((conversation) => {
+					return (friends = [...friends, { ...conversation.friend }]);
+				});
+				showMessages(friend.pk);
 			}
 		} catch (error) {
 			console.log("error", error.message);
@@ -119,6 +144,12 @@
 		}
 	}
 
+	// setInterval(() => {
+	// 	if (loading === false) {
+	// 		refreshMessages();
+	// 	}
+	// }, 5000);
+
 	onMount(() => {
 		fetchMessaging();
 	});
@@ -135,7 +166,7 @@
 				<p>No friends messaged</p>
 			</div>
 		{:else}
-			{#each friends.reverse() as friend}
+			{#each friends as friend}
 				<button
 					class="person"
 					on:click={() => {
