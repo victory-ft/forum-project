@@ -5,8 +5,9 @@
 	import Line from "./Line.svelte";
 
 	let communityLoading = true;
-	let membersLoading = true;
 	let communities = [];
+	let membersLoading = true;
+	let members = [];
 
 	function getCookie(cname) {
 		let name = cname + "=";
@@ -40,8 +41,25 @@
 		communityLoading = false;
 	};
 
+	const fetchCommunityUsers = async () => {
+		const auth = getCookie("token");
+		const response = await fetch(
+			`https://forum-co-backend.onrender.com/socials/get-community-users/2`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${auth}`,
+				},
+			},
+		);
+		const res = await response.json();
+		members = res.members.slice(0, 3);
+		membersLoading = false;
+	};
+
 	onMount(() => {
 		fetchCommunity();
+		fetchCommunityUsers();
 	});
 </script>
 
@@ -69,30 +87,21 @@
 		{/if}
 	</div>
 	<div class="popular-members">
-		<h3>Popular Members</h3>
-		<Line />
-		<div class="member">
-			<a href={"#"} class="member-link">
-				<p class="community-name">@oluwa_tayo</p>
-				<p class="community-members">11.2k followers</p>
-			</a>
-			<!-- <button class="follow">Follow</button> -->
-		</div>
-
-		<div class="member">
-			<a href={"#"} class="member-link">
-				<p class="community-name">@ayodele</p>
-				<p class="community-members">20.1k followers</p>
-			</a>
-			<!-- <button class="follow">Follow</button> -->
-		</div>
-		<div class="member">
-			<a href={"#"} class="member-link">
-				<p class="community-name">@somebody</p>
-				<p class="community-members">9.0k followers</p>
-			</a>
-			<!-- <button class="follow">Follow</button> -->
-		</div>
+		{#if membersLoading}
+			<Loading />
+		{:else}
+			<h3>Popular Members</h3>
+			<Line />
+			{#each members as member}
+				<div class="member">
+					<a href={"#"} class="member-link">
+						<p class="community-name">{member.first_name}</p>
+						<p class="community-members">@{member.username}</p>
+					</a>
+					<button class="follow">Message</button>
+				</div>
+			{/each}
+		{/if}
 	</div>
 </nav>
 
@@ -137,11 +146,14 @@
 
 	.popular-communities,
 	.popular-members {
+		display: grid;
+		place-content: center;
 		margin-top: 20px;
 		border-radius: 20px;
 		padding: 10px 10px 20px;
 		background-color: #fff;
 		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+		min-height: 200px;
 	}
 
 	.community,
@@ -191,6 +203,7 @@
 		border-radius: 10px;
 		border: none;
 		font-size: 0.8rem;
+		margin-left: 10px;
 		background-color: #512eed36;
 		cursor: pointer;
 	}

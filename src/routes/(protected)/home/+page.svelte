@@ -1,7 +1,6 @@
 <script>
 	import { onMount } from "svelte";
 	import PageLoading from "$lib/components/PageLoading.svelte";
-	import Page from "../communities/[id]/+page.svelte";
 
 	export let data;
 
@@ -20,31 +19,33 @@
 				},
 			},
 		);
-		posts = await response.json();
-		const likedIds = new Set(likedPosts.map((post) => post.id));
-		const dislikedIds = new Set(likedPosts.map((post) => post.id));
+		if (response.ok) {
+			posts = await response.json();
+			const likedIds = new Set(likedPosts.map((post) => post.id));
+			const dislikedIds = new Set(likedPosts.map((post) => post.id));
 
-		posts.forEach((post) => {
-			if (!likedIds.has(post.pk)) {
-				likedPosts.push({
-					id: post.pk,
-					isLiked: post.is_liked,
-					likes: post.likes,
-				});
-				likedIds.add(post.pk);
-			}
-		});
+			posts.forEach((post) => {
+				if (!likedIds.has(post.pk)) {
+					likedPosts.push({
+						id: post.pk,
+						isLiked: post.is_liked,
+						likes: post.likes,
+					});
+					likedIds.add(post.pk);
+				}
+			});
 
-		posts.forEach((post) => {
-			if (!dislikedIds.has(post.pk)) {
-				dislikedPosts.push({
-					id: post.pk,
-					isDisliked: post.is_disliked,
-					dislikes: post.dislikes,
-				});
-				dislikedIds.add(post.pk);
-			}
-		});
+			posts.forEach((post) => {
+				if (!dislikedIds.has(post.pk)) {
+					dislikedPosts.push({
+						id: post.pk,
+						isDisliked: post.is_disliked,
+						dislikes: post.dislikes,
+					});
+					dislikedIds.add(post.pk);
+				}
+			});
+		}
 
 		// console.log(likedPosts);
 		// console.log(posts);
@@ -58,6 +59,7 @@
 
 	const likePost = async (id) => {
 		try {
+			addLike(id);
 			const response = await fetch(
 				`https://forum-co-backend.onrender.com/socials/like-post/${id}/`,
 				{
@@ -69,8 +71,6 @@
 			);
 
 			if (response.ok) {
-				console.log("liked");
-				addLike(id);
 			}
 			//
 		} catch (error) {
@@ -80,6 +80,7 @@
 
 	const dislikePost = async (id) => {
 		try {
+			addDislike(id);
 			const response = await fetch(
 				`https://forum-co-backend.onrender.com/socials/dislike-post/${id}/`,
 				{
@@ -89,11 +90,6 @@
 					},
 				},
 			);
-
-			if (response.ok) {
-				console.log("dislike");
-				addDislike(id);
-			}
 			//
 		} catch (error) {
 			console.log("error", error.message);
@@ -102,8 +98,9 @@
 
 	const removeLikePost = async (id) => {
 		try {
+			removeLike(id);
 			const response = await fetch(
-				`https://forum-co-backend.onrender.com/socials/remove-dislike-post/${id}/`,
+				`https://forum-co-backend.onrender.com/socials/remove-like-post/${id}/`,
 				{
 					method: "POST",
 					headers: {
@@ -112,9 +109,8 @@
 				},
 			);
 
-			if (response.ok) {
-				removeLike(id);
-			}
+			// if (response.ok) {
+			// }
 			//
 		} catch (error) {
 			console.log("error", error.message);
@@ -123,6 +119,7 @@
 
 	const removeDislikePost = async (id) => {
 		try {
+			removeDislike(id);
 			const response = await fetch(
 				`https://forum-co-backend.onrender.com/socials/remove-dislike-post/${id}/`,
 				{
@@ -133,9 +130,6 @@
 				},
 			);
 
-			if (response.ok) {
-				removeDislike(id);
-			}
 			//
 		} catch (error) {
 			console.log("error", error.message);
@@ -230,7 +224,7 @@
 								1h
 							</div>
 						</div>
-						<a href="/post/1" class="post-message">
+						<a href={`/post/${post.pk}`} class="post-message">
 							{post.text}
 						</a>
 						<div class="post-actions">

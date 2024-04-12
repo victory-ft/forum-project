@@ -3,6 +3,7 @@
 	import { page } from "$app/stores";
 	import { enhance } from "$app/forms";
 	import PageLoading from "$lib/components/PageLoading.svelte";
+	import Button from "$lib/components/Button.svelte";
 	import Loading from "$lib/components/Loading.svelte";
 
 	export let data;
@@ -52,15 +53,18 @@
 			<div class="post-container">
 				<a href={`/profile/${member.pk}`} class="post">
 					<div class="post-message-container">
-						<div class="post-username-container">
-							<img src="/images/dummy.png" alt="pfp" class="profile-img" />
-							<div class="profile-text-info">
-								<p class="post-name">
-									{member.first_name}
-									{member.last_name}
-								</p>
-								<p class="post-username">@{member.username}</p>
+						<div class="cont">
+							<div class="post-username-container">
+								<img src="/images/dummy.png" alt="pfp" class="profile-img" />
+								<div class="profile-text-info">
+									<p class="post-name">
+										{member.first_name}
+										{member.last_name}
+									</p>
+									<p class="post-username">@{member.username}</p>
+								</div>
 							</div>
+							<button class="post-btn">Message</button>
 						</div>
 					</div>
 				</a>
@@ -74,13 +78,6 @@
 		font-weight: 600;
 		color: #502eed;
 		margin-bottom: 0;
-	}
-
-	.community-desc {
-		font-weight: 400;
-		margin: 0;
-		margin-bottom: 5px;
-		font-size: 1.2rem;
 	}
 
 	.members-number {
@@ -103,51 +100,13 @@
 		padding: 20px;
 	}
 
-	.no-posts {
-		font-weight: 500;
-		color: #656464;
-	}
-
-	.post-input-container {
-		display: flex;
-		justify-content: start;
-		align-items: start;
-		flex-direction: column;
-	}
-
-	.post-msg-container {
-		form {
-			& > div {
-				display: flex;
-				width: 100%;
-			}
-			/* flex-wrap: wrap; */
-
-			button {
-				display: block;
-				/* flex: 0 1 100%; */
-			}
-		}
-	}
-
 	.profile-img {
 		width: 3rem;
 		margin-right: 10px;
 		border-radius: 50%;
 	}
 
-	.post-input {
-		width: 100%;
-		padding: 10px 20px;
-		border-radius: 20px;
-		border: none;
-		background-color: #ededed;
-		outline: none;
-		font-size: 1rem;
-	}
-
 	.post-btn {
-		margin-top: 20px;
 		padding: 10px 25px;
 		border-radius: 20px;
 		border: none;
@@ -155,14 +114,19 @@
 		background-color: #512eed36;
 		cursor: pointer;
 		color: #000;
-
-		&.cd {
-			margin-top: 10px;
-		}
+		margin-left: 20px;
 	}
 
 	.post-container {
 		padding: 10px;
+	}
+
+	.cont {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		width: 50%;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.post-container:hover {
@@ -190,46 +154,7 @@
 	.post-username {
 		font-size: 0.9rem;
 		color: #656464;
-	}
-
-	.post-time {
-		margin-left: 5px;
-		font-size: 0.9rem;
-		color: #656464;
-	}
-
-	.post-time span {
-		margin-right: 5px;
-	}
-
-	.post-message {
-		margin: 5px 0;
-		text-decoration: none;
-		color: #000;
-	}
-
-	.post-actions {
-		display: flex;
-		justify-content: start;
-		align-items: center;
-		margin-top: 20px;
-	}
-
-	.post-action {
-		background-color: transparent;
-		border: none;
-		display: flex;
-		justify-content: start;
-		align-items: center;
-		margin-right: 10px;
-		font-size: 0.85rem;
-		cursor: pointer;
-		color: #000;
-
-		img {
-			width: 1.4rem;
-			margin-right: 4px;
-		}
+		margin-bottom: 20px;
 	}
 
 	.profile-text-info {
@@ -249,6 +174,10 @@
 			margin: 0 -10px -10px;
 			padding-right: 1px;
 			padding-left: -1px;
+		}
+
+		.cont {
+			width: 100%;
 		}
 
 		h1 {

@@ -1,16 +1,15 @@
 <script>
-	import { afterUpdate } from "svelte";
-	import Conversation from "$lib/components/Conversation.svelte";
+	import { onMount, afterUpdate } from "svelte";
+	import { page } from "$app/stores";
+	import { enhance } from "$app/forms";
 	import Button from "$lib/components/Button.svelte";
+	import Loading from "$lib/components/Loading.svelte";
+	import PageLoading from "$lib/components/PageLoading.svelte";
+	// import Conversation from "$lib/components/Conversation.svelte";
 
 	let showConversation = false,
 		conversationHeight,
 		mainC;
-	// $: console.log(conversationHeight, mainC);
-
-	function setConvoFalse() {
-		showConversation = false;
-	}
 
 	function goToBottom() {
 		if (showConversation) {
@@ -21,25 +20,81 @@
 	afterUpdate(() => {
 		goToBottom();
 	});
+
+	export let data;
+
+	let isChatOpen = false;
+	let loading = true;
+	let friends = [];
+	let conversations = [];
+	let messages = [];
+	let friend = {};
+	let openedConversation = false;
+
+	const fetchMessaging = async () => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/message/get-conversations/`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				conversations = await response.json();
+				// console.log(conversations);
+				conversations.map((conversation) => {
+					return (friends = [...friends, { ...conversation.friend }]);
+				});
+				// console.log(friends);
+				loading = false;
+			}
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
+	function showMessages(id) {
+		const conversation = conversations.find((c) => c.friend.pk === id);
+		messages = conversation.messages;
+		friend = conversation.friend;
+		console.log(messages, friend);
+		openedConversation = true;
+	}
+
+	onMount(() => {
+		fetchMessaging();
+	});
 </script>
 
 <main>
 	<div class="people {showConversation && 'hide'}">
-		<button
-			class="person"
-			on:click={() => (showConversation = !showConversation)}
-		>
-			<img src="/images/dummy.png" alt="profile" class="profile-picture" />
-			<p class="name">Victory</p>
-		</button>
-		<button class="person" on:click={() => (showConversation = true)}>
-			<img src="/images/dummy.png" alt="profile" class="profile-picture" />
-			<p class="name">Ayodele</p>
-		</button>
-		<button class="person" on:click={() => (showConversation = true)}>
-			<img src="/images/dummy.png" alt="profile" class="profile-picture" />
-			<p class="name">Sarah</p>
-		</button>
+		{#if loading}
+			<div class="load-div">
+				<Loading />
+			</div>
+		{:else if friends.length === 0}
+			<div class="no-chat">
+				<p>No friends messaged</p>
+			</div>
+		{:else}
+			{#each friends as friend}
+				<button
+					class="person"
+					on:click={() => {
+						showConversation = !showConversation;
+						showMessages(friend.pk);
+					}}
+				>
+					<img src="/images/dummy.png" alt="profile" class="profile-picture" />
+					<p class="name">{friend.first_name} {friend.last_name}</p>
+					<!-- <p class="username">@victory</p> -->
+				</button>
+			{/each}
+		{/if}
 	</div>
 	<div
 		class="conversation {!showConversation && 'hide'}"
@@ -47,73 +102,88 @@
 		bind:this={mainC}
 	>
 		<!-- <Conversation {setConvoFalse} {conversationHeight} {mainC} /> -->
+		{#if !openedConversation}
+			<div class="no-chat"><p>Click on a friend to see messages</p></div>
+		{:else}
+			<div class="conversation-header">
+				<button
+					class="back-btn"
+					on:click={() => (showConversation = !showConversation)}
+				>
+					<img src="/icons/arrow-left.svg" alt="back" />
+				</button>
+				<img src="/images/dummy.png" alt="profile" class="profile-picture" />
+				<p class="name">{friend.first_name} {friend.last_name}</p>
+			</div>
 
-		<div class="conversation-header">
-			<button class="back-btn" on:click={() => setConvoFalse()}>
-				<img src="/icons/arrow-left.svg" alt="back" />
-			</button>
-			<img src="/images/dummy.png" alt="profile" class="profile-picture" />
-			<p class="name">Victory</p>
-		</div>
-
-		<div class="conversation-messages">
-			<p class="message-bubble left">Hi</p>
-			<p class="message-bubble right">Hey</p>
-			<p class="message-bubble left">
-				Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
-				cumque.
-			</p>
-			<p class="message-bubble right">
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem
-				at quis reprehenderit nam soluta recusandae.
-			</p>
-			<p class="message-bubble right">Lorem ipsum dolor sit.</p>
-			<p class="message-bubble left">Hi</p>
-			<p class="message-bubble right">Hey</p>
-			<p class="message-bubble left">
-				Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
-				cumque.
-			</p>
-			<p class="message-bubble right">
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem
-				at quis reprehenderit nam soluta recusandae.
-			</p>
-			<p class="message-bubble right">Lorem ipsum dolor sit.</p>
-			<p class="message-bubble left">Hi</p>
-			<p class="message-bubble right">Hey</p>
-			<p class="message-bubble left">
-				Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
-				cumque.
-			</p>
-			<p class="message-bubble right">
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem
-				at quis reprehenderit nam soluta recusandae.
-			</p>
-			<p class="message-bubble right">Lorem ipsum dolor sit.</p>
-			<p class="message-bubble left">Hi</p>
-			<p class="message-bubble right">Hey</p>
-			<p class="message-bubble left">
-				Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
-				cumque.
-			</p>
-			<p class="message-bubble right">
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem
-				at quis reprehenderit nam soluta recusandae.
-			</p>
-			<p class="message-bubble right">Lorem ipsum dolor sit.</p>
-			<form on:submit|preventDefault={goToBottom} class="reply-container">
-				<input
-					type="text"
-					id="reply"
-					name="reply"
-					class="reply"
-					placeholder="Write a message..."
-				/>
-				<Button>
-					<img src="/icons/send-plane.svg" alt="send" class="send-msg" />
-				</Button>
-			</form>
-		</div>
+			<div class="conversation-messages">
+				<div class="conversation-texts">
+					{#each messages as message}
+						<p
+							class={`message-bubble ${message.from_user.pk === friend.pk ? "left" : "right"}`}
+						>
+							{message.text}
+						</p>
+					{/each}
+				</div>
+				<!-- <p class="message-bubble left">Hi</p>
+				<p class="message-bubble right">Hey</p> -->
+				<!-- <p class="message-bubble left">
+					Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
+					cumque.
+				</p>
+				<p class="message-bubble right">
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+					Exercitationem at quis reprehenderit nam soluta recusandae.
+				</p>
+				<p class="message-bubble right">Lorem ipsum dolor sit.</p>
+				<p class="message-bubble left">Hi</p>
+				<p class="message-bubble right">Hey</p>
+				<p class="message-bubble left">
+					Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
+					cumque.
+				</p>
+				<p class="message-bubble right">
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+					Exercitationem at quis reprehenderit nam soluta recusandae.
+				</p>
+				<p class="message-bubble right">Lorem ipsum dolor sit.</p>
+				<p class="message-bubble left">Hi</p>
+				<p class="message-bubble right">Hey</p>
+				<p class="message-bubble left">
+					Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
+					cumque.
+				</p>
+				<p class="message-bubble right">
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+					Exercitationem at quis reprehenderit nam soluta recusandae.
+				</p>
+				<p class="message-bubble right">Lorem ipsum dolor sit.</p>
+				<p class="message-bubble left">Hi</p>
+				<p class="message-bubble right">Hey</p>
+				<p class="message-bubble left">
+					Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
+					cumque.
+				</p>
+				<p class="message-bubble right">
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+					Exercitationem at quis reprehenderit nam soluta recusandae.
+				</p>
+				<p class="message-bubble right">Lorem ipsum dolor sit.</p> -->
+				<form on:submit|preventDefault={goToBottom} class="reply-container">
+					<input
+						type="text"
+						id="reply"
+						name="reply"
+						class="reply"
+						placeholder="Write a message..."
+					/>
+					<Button>
+						<img src="/icons/send-plane.svg" alt="send" class="send-msg" />
+					</Button>
+				</form>
+			</div>
+		{/if}
 	</div>
 </main>
 
@@ -127,6 +197,12 @@
 		padding-right: 0;
 		display: grid;
 		grid-template-columns: 1fr 2fr;
+	}
+
+	.load-div {
+		display: grid;
+		place-content: center;
+		min-height: 95%;
 	}
 
 	.people {
@@ -153,6 +229,13 @@
 		margin-left: 10px;
 		font-size: 1.1rem;
 		color: #000;
+	}
+
+	.username {
+		/* margin: 0 0px 5px; */
+		/* padding: 0; */
+		font-size: 0.9rem;
+		color: #656464;
 	}
 
 	.profile-picture {
@@ -188,6 +271,12 @@
 		font-size: 1.1rem;
 	}
 
+	.no-chat {
+		display: grid;
+		place-content: center;
+		min-height: 100%;
+	}
+
 	.conversation-header {
 		display: flex;
 		justify-content: start;
@@ -200,6 +289,14 @@
 		padding: 10px 10px 0;
 		z-index: 1;
 		border-radius: 15px 15px 0 0;
+	}
+
+	.conversation-texts {
+		display: flex;
+		flex-direction: column;
+		/* align-items: flex-end; */
+		justify-content: flex-end;
+		min-height: 75vh;
 	}
 
 	.message-bubble {
@@ -295,6 +392,10 @@
 
 		.conversation-header {
 			position: sticky;
+		}
+
+		.conversation-texts {
+			min-height: 84vh;
 		}
 	}
 </style>

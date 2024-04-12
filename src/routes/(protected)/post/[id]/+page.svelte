@@ -1,148 +1,234 @@
 <script>
+	import { onMount } from "svelte";
+	import { page } from "$app/stores";
+	import { enhance } from "$app/forms";
 	import Line from "$lib/components/Line.svelte";
 	import Button from "$lib/components/Button.svelte";
+	import PageLoading from "$lib/components/PageLoading.svelte";
+	import Loading from "$lib/components/Loading.svelte";
+
+	export let data;
+	const { id } = $page.params;
+
+	let post = {};
+	let loading = true;
+	let commentLoading = false;
+	let actions = {};
+
+	const fetchPost = async (id) => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/get-post-info/${id}/`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				post = await response.json();
+				console.log(post);
+				actions = {
+					isLiked: post.is_liked,
+					isDisliked: post.is_disliked,
+					likes: post.likes,
+					dislikes: post.dislikes,
+				};
+				loading = false;
+			}
+
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
+	function addLike() {
+		if (!actions.isLiked) {
+			actions = {
+				isLiked: true,
+				likes: (actions.likes += 1),
+				isDisliked: false,
+				dislikes: (actions.dislikes -= 1),
+			};
+		}
+	}
+
+	function addDislike() {
+		if (!actions.isDisliked) {
+			actions = {
+				isLiked: false,
+				likes: (actions.likes -= 1),
+				isDisliked: true,
+				dislikes: (actions.dislikes += 1),
+			};
+		}
+	}
+
+	function removeLike() {
+		if (actions.isLiked) {
+			actions = { isLiked: false, likes: (actions.likes -= 1) };
+		}
+	}
+
+	function removeDislike() {
+		if (actions.isDisliked) {
+			actions = { isDisliked: false, dislikes: (actions.dislikes -= 1) };
+		}
+	}
+
+	onMount(() => {
+		fetchPost(id);
+	});
 </script>
 
 <main class="post-container">
-	<div class="post-community">
+	<!-- <div class="post-community">
 		<img src="/icons/community.svg" alt="community-icon" />
 		<p class="community-name">Software Development</p>
-	</div>
+	</div> -->
 
-	<h2>Post</h2>
+	{#if loading}
+		<PageLoading />
+	{:else}
+		<h2>Post</h2>
 
-	<div class="post-message-container">
-		<div class="post-message">
-			Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore non
-			quaerat quis, itaque eos iure maiores tempora repudiandae, quibusdam,
-			minima maxime. Earum cumque asperiores error officia omnis corrupti
-			doloribus alias? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-			Minus iste labore, suscipit culpa rerum enim. In, recusandae quibusdam
-			iure voluptas fugiat, ea beatae, ex nemo porro reprehenderit rem commodi
-			placeat!
-		</div>
-		<div class="post-author">
-			<div class="post-author-info">
-				<img src="/images/dummy.png" alt="post-author" class="author-image" />
-				<div class="post-author-text">
-					<p class="post-name">Oluwatayo</p>
-					<p class="post-username">@oluwatayo</p>
-				</div>
+		<div class="post-message-container">
+			<div class="post-message">
+				{post.text}
 			</div>
-
-			<div class="post-created">
-				<p>07:58 PM</p>
-				<p>Mar, 24 2024</p>
-			</div>
-		</div>
-		<div class="post-actions">
-			<button class="post-action">
-				<img src="/icons/comment.svg" alt="comments" />
-				23
-			</button>
-			<button class="post-action">
-				<img src="/icons/thumb-up.svg" alt="like" />
-				450
-			</button>
-			<button class="post-action">
-				<img src="/icons/thumb-down.svg" alt="dislike" />
-			</button>
-		</div>
-	</div>
-	<Line />
-	<div class="reply-container">
-		<div class="reply-input-container">
-			<input type="text" placeholder="Reply..." />
-			<Button>Reply</Button>
-		</div>
-
-		<div class="reply-message-container">
 			<div class="post-author">
-				<div class="post-author-info">
+				<a href={`/profile/${post.owner.pk}`} class="post-author-info">
 					<img src="/images/dummy.png" alt="post-author" class="author-image" />
 					<div class="post-author-text">
-						<p class="post-name">Ayodele</p>
-						<p class="post-username">@badboyayo</p>
+						<p class="post-name">
+							{post.owner.first_name}
+							{post.owner.last_name}
+						</p>
+						<p class="post-username">@{post.owner.username}</p>
 					</div>
-				</div>
+				</a>
+
+				<!-- <div class="post-created">
+					<p>07:58 PM</p>
+					<p>Mar, 24 2024</p>
+				</div> -->
 			</div>
-			<a href="/post/1/reply/1" class="reply-message">
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt
-				delectus dolor, dolorum quis ab itaque ut rem deserunt cum? Nostrum
-				porro nesciunt corporis voluptatum rerum eos ratione iste animi non!
-			</a>
 			<div class="post-actions">
 				<button class="post-action">
 					<img src="/icons/comment.svg" alt="comments" />
-					2
+					{post.comments.length}
 				</button>
-				<button class="post-action">
-					<img src="/icons/thumb-up.svg" alt="like" />
-					42
-				</button>
-				<button class="post-action">
-					<img src="/icons/thumb-down.svg" alt="dislike" />
-				</button>
+				<form
+					action={!actions.isLiked ? "?/like" : "?/removeLike"}
+					method="POST"
+					use:enhance={() => {
+						actions.isLiked ? removeLike() : addLike();
+						return async ({ update }) => {
+							update();
+						};
+					}}
+				>
+					<button class="post-action">
+						<img
+							src={actions.isLiked
+								? "/icons/thumb-up-fill.svg"
+								: "/icons/thumb-up.svg"}
+							alt="like"
+						/>
+						{actions.likes}
+					</button>
+				</form>
+				<form
+					action={!actions.isDisliked ? "?/dislike" : "?/removeDislike"}
+					method="POST"
+					use:enhance={() => {
+						actions.isDisliked ? removeDislike() : addDislike();
+						return async ({ update }) => {
+							update();
+						};
+					}}
+				>
+					<button class="post-action">
+						<img
+							src={actions.isDisliked
+								? "/icons/thumb-down-fill.svg"
+								: "/icons/thumb-down.svg"}
+							alt="dislike"
+						/>
+					</button>
+				</form>
 			</div>
 		</div>
-		<div class="reply-message-container">
-			<div class="post-author">
-				<div class="post-author-info">
-					<img src="/images/dummy.png" alt="post-author" class="author-image" />
-					<div class="post-author-text">
-						<p class="post-name">John Doe</p>
-						<p class="post-username">@theirdaddy</p>
+		<Line />
+		<div class="reply-container">
+			<form
+				class="reply-input-container"
+				action="?/comment"
+				method="POST"
+				use:enhance={() => {
+					commentLoading = true;
+					return async ({ update }) => {
+						commentLoading = false;
+						fetchPost(id);
+						update();
+					};
+				}}
+			>
+				<input type="text" name="text" id="text" placeholder="Reply..." />
+				<Button>
+					{#if commentLoading}
+						<Loading />
+					{:else}
+						Reply
+					{/if}
+				</Button>
+			</form>
+
+			{#if post.comments.length === 0}
+				<p class="no-comments">No comments</p>
+			{:else}
+				{#each post.comments.reverse() as comment}
+					<div class="reply-message-container">
+						<div class="post-author">
+							<div class="post-author-info">
+								<img
+									src="/images/dummy.png"
+									alt="post-author"
+									class="author-image"
+								/>
+								<div class="post-author-text">
+									<p class="post-name">
+										{comment.owner.first_name}
+										{comment.owner.last_name}
+									</p>
+									<p class="post-username">@{comment.owner.username}</p>
+								</div>
+							</div>
+						</div>
+						<a href={"#"} class="reply-message">
+							{comment.text}
+						</a>
+						<!-- <div class="post-actions">
+							<button class="post-action">
+								<img src="/icons/comment.svg" alt="comments" />
+								2
+							</button>
+							<button class="post-action">
+								<img src="/icons/thumb-up.svg" alt="like" />
+								42
+							</button>
+							<button class="post-action">
+								<img src="/icons/thumb-down.svg" alt="dislike" />
+							</button>
+						</div> -->
 					</div>
-				</div>
-			</div>
-			<a href="/post/1/reply/1" class="reply-message">
-				Lorem ipsum, dolor sit amet consectetur adipisicing elit. Obcaecati
-				voluptatibus reiciendis amet provident molestiae aperiam ratione,
-				deserunt ipsa in libero repellat nam quis est commodi quas qui dolores.
-			</a>
-			<div class="post-actions">
-				<button class="post-action">
-					<img src="/icons/comment.svg" alt="comments" />
-					8
-				</button>
-				<button class="post-action">
-					<img src="/icons/thumb-up.svg" alt="like" />
-					29
-				</button>
-				<button class="post-action">
-					<img src="/icons/thumb-down.svg" alt="dislike" />
-				</button>
-			</div>
+				{/each}
+			{/if}
 		</div>
-		<div class="reply-message-container">
-			<div class="post-author">
-				<div class="post-author-info">
-					<img src="/images/dummy.png" alt="post-author" class="author-image" />
-					<div class="post-author-text">
-						<p class="post-name">A person</p>
-						<p class="post-username">@someone</p>
-					</div>
-				</div>
-			</div>
-			<a href="/post/1/reply/1" class="reply-message">
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam adipisci
-				culpa ipsam!
-			</a>
-			<div class="post-actions">
-				<button class="post-action">
-					<img src="/icons/comment.svg" alt="comments" />
-					12
-				</button>
-				<button class="post-action">
-					<img src="/icons/thumb-up.svg" alt="like" />
-					42
-				</button>
-				<button class="post-action">
-					<img src="/icons/thumb-down.svg" alt="dislike" />
-				</button>
-			</div>
-		</div>
-	</div>
+	{/if}
 </main>
 
 <style lang="scss">
@@ -223,6 +309,8 @@
 		display: flex;
 		justify-content: start;
 		align-items: center;
+		text-decoration: none;
+		color: #000;
 
 		img {
 			height: 2.5rem;
@@ -232,16 +320,18 @@
 
 		.post-author-text {
 			margin-left: 10px;
+			font-size: 0.9rem;
 		}
 
 		.post-name {
 			margin-bottom: 0;
 			font-weight: 500;
+			font-size: 0.9rem;
 		}
 
 		.post-username {
 			margin-top: 0;
-			font-size: 0.9rem;
+			font-size: 0.8rem;
 			color: #656464;
 		}
 	}
@@ -271,6 +361,11 @@
 			background-color: #ededed;
 			font-size: 1rem;
 		}
+	}
+
+	.no-comments {
+		font-weight: 500;
+		color: #656464;
 	}
 
 	.reply-message-container {
