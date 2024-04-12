@@ -85,6 +85,7 @@
 	@media only screen and (max-width: 650px) {
 		.modal {
 			width: 300px;
+			height: 240px;
 		}
 	}
 </style>

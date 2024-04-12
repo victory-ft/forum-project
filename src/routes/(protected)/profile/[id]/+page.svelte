@@ -31,7 +31,6 @@
 			},
 		);
 		profile = await response.json();
-		console.log(profile);
 		date = new Date(profile.date_joined);
 		loading = false;
 	};
@@ -109,16 +108,20 @@
 				<p class="info-content">{date.toDateString()}</p>
 			</div>
 		</div>
-		<button
-			class="post-btn"
-			on:click={() => {
-				to_pk = profile.pk;
-				receiver = `${profile.first_name} ${profile.last_name}`;
-				setMessageModal();
-			}}
-		>
-			Send Message
-		</button>
+		{#if profile.is_my_profile}
+			<br />
+		{:else}
+			<button
+				class="post-btn"
+				on:click={() => {
+					to_pk = profile.pk;
+					receiver = `${profile.first_name} ${profile.last_name}`;
+					setMessageModal();
+				}}
+			>
+				Send Message
+			</button>
+		{/if}
 	</main>
 {/if}
 
