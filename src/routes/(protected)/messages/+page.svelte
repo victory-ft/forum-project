@@ -144,11 +144,11 @@
 		}
 	}
 
-	// setInterval(() => {
-	// 	if (loading === false) {
-	// 		refreshMessages();
-	// 	}
-	// }, 5000);
+	setInterval(() => {
+		if (loading === false) {
+			refreshMessages();
+		}
+	}, 5000);
 
 	onMount(() => {
 		fetchMessaging();
