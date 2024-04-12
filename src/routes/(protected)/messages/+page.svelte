@@ -31,6 +31,10 @@
 	let friend = {};
 	let openedConversation = false;
 
+	let to_pk = "";
+	let text = "";
+	let sendLoading = false;
+
 	const fetchMessaging = async () => {
 		try {
 			const response = await fetch(
@@ -57,12 +61,62 @@
 		}
 	};
 
+	const fetchMessagesAfterSend = async () => {
+		try {
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/message/get-conversations/`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+
+			if (response.ok) {
+				conversations = await response.json();
+				showMessages(friend.pk);
+				// console.log(conversations);
+				// console.log(friends);
+			}
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
 	function showMessages(id) {
 		const conversation = conversations.find((c) => c.friend.pk === id);
 		messages = conversation.messages;
 		friend = conversation.friend;
-		console.log(messages, friend);
+		to_pk = conversation.friend.pk;
 		openedConversation = true;
+	}
+
+	async function sendMessage() {
+		try {
+			sendLoading = true;
+
+			const response = await fetch(
+				"https://forum-co-backend.onrender.com/message/send/",
+				{
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${data.token}`,
+					},
+					body: JSON.stringify({ to_pk, text }),
+				},
+			);
+			if (response.ok) {
+				text = "";
+				fetchMessagesAfterSend();
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			sendLoading = false;
+		}
 	}
 
 	onMount(() => {
@@ -81,7 +135,7 @@
 				<p>No friends messaged</p>
 			</div>
 		{:else}
-			{#each friends as friend}
+			{#each friends.reverse() as friend}
 				<button
 					class="person"
 					on:click={() => {
@@ -126,60 +180,27 @@
 						</p>
 					{/each}
 				</div>
-				<!-- <p class="message-bubble left">Hi</p>
-				<p class="message-bubble right">Hey</p> -->
-				<!-- <p class="message-bubble left">
-					Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
-					cumque.
-				</p>
-				<p class="message-bubble right">
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-					Exercitationem at quis reprehenderit nam soluta recusandae.
-				</p>
-				<p class="message-bubble right">Lorem ipsum dolor sit.</p>
-				<p class="message-bubble left">Hi</p>
-				<p class="message-bubble right">Hey</p>
-				<p class="message-bubble left">
-					Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
-					cumque.
-				</p>
-				<p class="message-bubble right">
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-					Exercitationem at quis reprehenderit nam soluta recusandae.
-				</p>
-				<p class="message-bubble right">Lorem ipsum dolor sit.</p>
-				<p class="message-bubble left">Hi</p>
-				<p class="message-bubble right">Hey</p>
-				<p class="message-bubble left">
-					Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
-					cumque.
-				</p>
-				<p class="message-bubble right">
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-					Exercitationem at quis reprehenderit nam soluta recusandae.
-				</p>
-				<p class="message-bubble right">Lorem ipsum dolor sit.</p>
-				<p class="message-bubble left">Hi</p>
-				<p class="message-bubble right">Hey</p>
-				<p class="message-bubble left">
-					Lorem ipsum dolor sit, adipisicing elit. Perferendis quisquam natus
-					cumque.
-				</p>
-				<p class="message-bubble right">
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-					Exercitationem at quis reprehenderit nam soluta recusandae.
-				</p>
-				<p class="message-bubble right">Lorem ipsum dolor sit.</p> -->
-				<form on:submit|preventDefault={goToBottom} class="reply-container">
+				<form
+					on:submit|preventDefault={() => {
+						goToBottom();
+						sendMessage();
+					}}
+					class="reply-container"
+				>
 					<input
 						type="text"
-						id="reply"
-						name="reply"
+						id="text"
+						name="text"
 						class="reply"
 						placeholder="Write a message..."
+						bind:value={text}
 					/>
 					<Button>
-						<img src="/icons/send-plane.svg" alt="send" class="send-msg" />
+						{#if sendLoading}
+							<Loading />
+						{:else}
+							<img src="/icons/send-plane.svg" alt="send" class="send-msg" />
+						{/if}
 					</Button>
 				</form>
 			</div>
@@ -317,6 +338,10 @@
 		content: "";
 		height: 1rem;
 		position: absolute;
+	}
+
+	.message-bubble.left {
+		margin-right: auto;
 	}
 
 	.message-bubble.right {
