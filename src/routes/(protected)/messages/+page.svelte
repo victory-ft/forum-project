@@ -148,7 +148,7 @@
 		if (loading === false) {
 			refreshMessages();
 		}
-	}, 5000);
+	}, 3000);
 
 	onMount(() => {
 		fetchMessaging();
