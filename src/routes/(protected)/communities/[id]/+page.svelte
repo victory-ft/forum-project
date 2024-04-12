@@ -4,6 +4,7 @@
 	import { enhance } from "$app/forms";
 	import PageLoading from "$lib/components/PageLoading.svelte";
 	import Loading from "$lib/components/Loading.svelte";
+	import Button from "$lib/components/Button.svelte";
 
 	export let data;
 	export let form;
@@ -211,6 +212,31 @@
 		}
 	}
 
+	let isDeleteModal = false;
+	let deleteLoading = false;
+	let deletePk = "";
+
+	const deletePost = async () => {
+		try {
+			deleteLoading = true;
+			const response = await fetch(
+				`https://forum-co-backend.onrender.com/socials/delete-community-post/${deletePk}/`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${data.token}`,
+					},
+				},
+			);
+			deleteLoading = false;
+			isDeleteModal = false;
+			fetchCommunity();
+			//
+		} catch (error) {
+			console.log("error", error.message);
+		}
+	};
+
 	onMount(() => {
 		fetchCommunity();
 	});
@@ -355,6 +381,17 @@
 										{/if}
 									{/each}
 								</button>
+								{#if community.is_admin}
+									<button
+										class="delete"
+										on:click={() => {
+											deletePk = post.pk;
+											isDeleteModal = !isDeleteModal;
+										}}
+									>
+										Delete post
+									</button>
+								{/if}
 							</div>
 						</div>
 					</div>
@@ -362,6 +399,24 @@
 			{/each}
 		{:else}
 			<h3 class="no-posts">No posts in this community</h3>
+		{/if}
+
+		{#if isDeleteModal}
+			<div class="modal">
+				<h2 class="sure">Are you sure?</h2>
+
+				<button class="close-btn" on:click={() => (isDeleteModal = false)}>
+					<img src="/icons/close.svg" alt="close" />
+				</button>
+
+				<button class="post-btn" on:click={deletePost}>
+					{#if deleteLoading}
+						<Loading />
+					{:else}
+						Yes
+					{/if}
+				</button>
+			</div>
 		{/if}
 	</main>
 {/if}
@@ -378,6 +433,11 @@
 		margin: 0;
 		margin-bottom: 5px;
 		font-size: 1.2rem;
+	}
+
+	.delete {
+		background-color: #ededed;
+		border: none;
 	}
 
 	.members-number {
@@ -550,4 +610,44 @@
 			margin-top: -5px;
 		}
 	}
+
+	.modal {
+		position: absolute;
+		padding: 10px;
+		margin: auto;
+		inset: 0;
+		border-radius: 20px;
+		width: 220px;
+		height: 120px;
+		background-color: #fff;
+		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+		z-index: 20;
+	}
+
+	.close-btn {
+		width: 2.5rem;
+		height: 2.5rem;
+		background-color: transparent;
+		border: none;
+		position: absolute;
+		right: 10px;
+		top: 10px;
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.sure {
+		margin-top: 0px;
+		color: #502eed;
+	}
+
+	/* @media only screen and (max-width: 650px) {
+		.modal {
+			width: 300px;
+			height: 240px;
+		}
+	} */
 </style>
