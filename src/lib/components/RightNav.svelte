@@ -2,6 +2,7 @@
 	import { goto } from "$app/navigation";
 	import { onMount } from "svelte";
 	import Loading from "$lib/components/Loading.svelte";
+	import SendMessage from "$lib/components/SendMessage.svelte";
 	import Line from "./Line.svelte";
 
 	let communityLoading = true;
@@ -57,6 +58,45 @@
 		membersLoading = false;
 	};
 
+	let isSendMessageOpen = false;
+	let sendLoading = false;
+	let receiver = "";
+	let to_pk = "";
+
+	function setMessageModal() {
+		isSendMessageOpen = !isSendMessageOpen;
+	}
+
+	function getMessage(txt) {
+		sendMessage(txt);
+	}
+
+	async function sendMessage(text) {
+		try {
+			sendLoading = true;
+			const auth = getCookie("token");
+			const response = await fetch(
+				"https://forum-co-backend.onrender.com/message/send/",
+				{
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${auth}`,
+					},
+					body: JSON.stringify({ to_pk, text }),
+				},
+			);
+			if (response.ok) {
+				setMessageModal();
+				goto("/messages");
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			sendLoading = false;
+		}
+	}
 	onMount(() => {
 		fetchCommunity();
 		fetchCommunityUsers();
@@ -69,6 +109,10 @@
 		<input type="search" class="search" placeholder="Search..." />
 	</div> -->
 
+	{#if isSendMessageOpen}
+		<SendMessage {setMessageModal} {getMessage} {sendLoading} {receiver} />
+	{/if}
+
 	<div class="popular-communities">
 		{#if communityLoading}
 			<Loading />
@@ -76,7 +120,7 @@
 			<h3>Popular Communities</h3>
 			<Line />
 			{#each communities as community}
-				<a href={"#"} class="community">
+				<a href={`/communities/${community.pk}`} class="community">
 					<p class="community-name">{community.name}</p>
 					<p class="community-members">
 						{community.member_count}
@@ -98,7 +142,16 @@
 						<p class="community-name">{member.first_name}</p>
 						<p class="community-members">@{member.username}</p>
 					</a>
-					<button class="follow">Message</button>
+					<button
+						class="follow"
+						on:click={() => {
+							to_pk = member.pk;
+							receiver = `${member.first_name} ${member.last_name}`;
+							setMessageModal();
+						}}
+					>
+						Message
+					</button>
 				</div>
 			{/each}
 		{/if}

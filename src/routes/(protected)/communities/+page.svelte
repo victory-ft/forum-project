@@ -78,7 +78,7 @@
 		/* margin-bottom: 0;
 		padding-bottom: 0; */
 		display: flex;
-		justify-content: center;
+		justify-content: start;
 		align-items: center;
 		text-decoration: none;
 		color: #000;

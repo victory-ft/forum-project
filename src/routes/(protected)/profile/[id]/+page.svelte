@@ -1,8 +1,10 @@
 <script>
 	import { onMount } from "svelte";
 	import { page } from "$app/stores";
+	import { goto } from "$app/navigation";
 	// import { enhance } from "$app/forms";
 	import PageLoading from "$lib/components/PageLoading.svelte";
+	import SendMessage from "$lib/components/SendMessage.svelte";
 	import Loading from "$lib/components/Loading.svelte";
 
 	export let data;
@@ -29,10 +31,49 @@
 			},
 		);
 		profile = await response.json();
-		// console.log(profile);
+		console.log(profile);
 		date = new Date(profile.date_joined);
 		loading = false;
 	};
+
+	let isSendMessageOpen = false;
+	let sendLoading = false;
+	let receiver = "";
+	let to_pk = "";
+
+	function setMessageModal() {
+		isSendMessageOpen = !isSendMessageOpen;
+	}
+
+	function getMessage(txt) {
+		sendMessage(txt);
+	}
+
+	async function sendMessage(text) {
+		try {
+			sendLoading = true;
+			const response = await fetch(
+				"https://forum-co-backend.onrender.com/message/send/",
+				{
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${data.token}`,
+					},
+					body: JSON.stringify({ to_pk, text }),
+				},
+			);
+			if (response.ok) {
+				setMessageModal();
+				goto("/messages");
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			sendLoading = false;
+		}
+	}
 
 	onMount(() => {
 		fetchProfile();
@@ -44,6 +85,9 @@
 		<PageLoading />
 	</main>
 {:else}
+	{#if isSendMessageOpen}
+		<SendMessage {setMessageModal} {getMessage} {sendLoading} {receiver} />
+	{/if}
 	<main>
 		<!-- <h1>Profile</h1> -->
 		<img src="/images/dummy.png" alt="profile" class="profile-img" />
@@ -65,7 +109,16 @@
 				<p class="info-content">{date.toDateString()}</p>
 			</div>
 		</div>
-		<button class="post-btn">Send Message</button>
+		<button
+			class="post-btn"
+			on:click={() => {
+				to_pk = profile.pk;
+				receiver = `${profile.first_name} ${profile.last_name}`;
+				setMessageModal();
+			}}
+		>
+			Send Message
+		</button>
 	</main>
 {/if}
 

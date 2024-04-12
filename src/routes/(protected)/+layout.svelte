@@ -3,7 +3,6 @@
 	import RightNav from "$lib/components/RightNav.svelte";
 
 	let isMenuOpen = false;
-	let isCreateCommunityOpen = false;
 
 	function closeMenu() {
 		isMenuOpen = false;

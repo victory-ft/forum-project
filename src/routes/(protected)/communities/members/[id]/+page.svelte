@@ -64,7 +64,7 @@
 									<p class="post-username">@{member.username}</p>
 								</div>
 							</div>
-							<button class="post-btn">Message</button>
+							<!-- <button class="post-btn">Message</button> -->
 						</div>
 					</div>
 				</a>
