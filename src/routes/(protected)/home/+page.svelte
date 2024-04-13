@@ -219,10 +219,6 @@
 								</p>
 								<p class="post-username">@{post.owner.username}</p>
 							</a>
-							<div class="post-time">
-								<span>•</span>
-								1h
-							</div>
 						</div>
 						<a href={`/post/${post.pk}`} class="post-message">
 							{post.text}

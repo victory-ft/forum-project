@@ -17,10 +17,6 @@
 		}
 	}
 
-	afterUpdate(() => {
-		goToBottom();
-	});
-
 	export let data;
 
 	let loading = true;
@@ -114,6 +110,7 @@
 		messages = conversation.messages;
 		friend = conversation.friend;
 		to_pk = conversation.friend.pk;
+		goToBottom();
 		openedConversation = true;
 	}
 
