@@ -47,19 +47,21 @@
 		<div class="names">
 			<h2>{profile.first_name} {profile.last_name}</h2>
 		</div>
-		<div class="more-info">
-			<div>
-				<p class="info-header">Username</p>
-				<p class="info-content">@{profile.username}</p>
-			</div>
-			<div>
-				<p class="info-header">Email</p>
-				<p class="info-content">{profile.email}</p>
-			</div>
+		<div class="profile-container">
+			<div class="more-info">
+				<div>
+					<p class="info-header">Username</p>
+					<p class="info-content">@{profile.username}</p>
+				</div>
+				<div>
+					<p class="info-header">Email</p>
+					<p class="info-content">{profile.email}</p>
+				</div>
 
-			<div>
-				<p class="info-header">Date joined</p>
-				<p class="info-content">{date.toDateString()}</p>
+				<div>
+					<p class="info-header">Date joined</p>
+					<p class="info-content">{date.toDateString()}</p>
+				</div>
 			</div>
 		</div>
 	</main>
@@ -79,7 +81,7 @@
 		overflow-y: auto;
 		padding: 20px;
 		display: grid;
-		place-content: center;
+		/* place-content: center; */
 		align-content: start;
 		min-height: 90vh;
 	}
@@ -98,7 +100,7 @@
 
 	.more-info {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: 1fr;
 		/* place-content: center; */
 
 		p {
@@ -107,6 +109,8 @@
 			&.info-header {
 				color: #656464;
 				font-size: 0.9rem;
+				font-weight: 600;
+
 				margin-bottom: 0;
 			}
 		}

@@ -152,7 +152,7 @@
 
 	.more-info {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr;
 		/* place-content: center; */
 
 		p {
@@ -161,6 +161,7 @@
 			&.info-header {
 				color: #656464;
 				font-size: 0.9rem;
+				font-weight: 600;
 				margin-bottom: 0;
 			}
 		}

@@ -111,10 +111,10 @@
 					</div>
 				</a>
 
-				<!-- <div class="post-created">
-					<p>07:58 PM</p>
-					<p>Mar, 24 2024</p>
-				</div> -->
+				<div class="post-created">
+					<p>{post.date_created}</p>
+					<!-- <p>Mar, 24 2024</p> -->
+				</div>
 			</div>
 			<div class="post-actions">
 				<button class="post-action">
@@ -206,6 +206,10 @@
 									</p>
 									<p class="post-username">@{comment.owner.username}</p>
 								</div>
+							</div>
+							<div class="post-created">
+								<p>{comment.date_created}</p>
+								<!-- <p>Mar, 24 2024</p> -->
 							</div>
 						</div>
 						<a href={"#"} class="reply-message">
