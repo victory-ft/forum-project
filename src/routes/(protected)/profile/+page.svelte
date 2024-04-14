@@ -110,7 +110,6 @@
 				color: #656464;
 				font-size: 0.9rem;
 				font-weight: 600;
-
 				margin-bottom: 0;
 			}
 		}
