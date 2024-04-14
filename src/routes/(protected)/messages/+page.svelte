@@ -75,7 +75,7 @@
 				conversations.map((conversation) => {
 					return (friends = [...friends, { ...conversation.friend }]);
 				});
-				showMessages(friend.pk);
+				showMessages2(friend.pk);
 			}
 		} catch (error) {
 			console.log("error", error.message);
@@ -96,7 +96,7 @@
 
 			if (response.ok) {
 				conversations = await response.json();
-				showMessages(friend.pk);
+				showMessages2(friend.pk);
 				// console.log(conversations);
 				// console.log(friends);
 			}
@@ -111,6 +111,14 @@
 		friend = conversation.friend;
 		to_pk = conversation.friend.pk;
 		goToBottom();
+		openedConversation = true;
+	}
+
+	function showMessages2(id) {
+		const conversation = conversations.find((c) => c.friend.pk === id);
+		messages = conversation.messages;
+		friend = conversation.friend;
+		to_pk = conversation.friend.pk;
 		openedConversation = true;
 	}
 
